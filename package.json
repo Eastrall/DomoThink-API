@@ -1,0 +1,23 @@
+{
+  "name": "domothink-api",
+  "version": "1.0.0",
+  "description": "DomoThink Test API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eastrall/DomoThink-Test-API.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "Filipe GOMES PEIXOTO, Guillaume Munsch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Eastrall/DomoThink-Test-API/issues"
+  },
+  "homepage": "https://github.com/Eastrall/DomoThink-Test-API#readme"
+}
