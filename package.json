@@ -23,6 +23,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "mysql": "^2.0.0-alpha8",
     "orm": "^3.1.0"
   }
 }
