@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Eastrall/DomoThink-Test-API#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "consign": "^0.1.2",
     "express": "^4.14.0",
     "orm": "^3.1.0"
   }
