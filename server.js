@@ -1,8 +1,8 @@
 // server.js
 
 // Initialize the app
-var bodyParser = require('body-parser');
-var express = require('express');
+import bodyParser from 'body-parser';
+import express from 'express';
 var app = express(); // create the app using express
 
 // Configure the app
