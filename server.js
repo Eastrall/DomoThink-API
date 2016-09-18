@@ -7,7 +7,7 @@ var app = express(); // create the app using express
 
 // Configure the app
 var port = 8080;
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // Initialize the routes

@@ -26,5 +26,9 @@
     "express": "^4.14.0",
     "mysql": "^2.0.0-alpha8",
     "orm": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.5.0",
+    "eslint-config-google": "^0.6.0"
   }
 }
