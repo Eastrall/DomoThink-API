@@ -1,8 +1,12 @@
 // server.js
+"use strict";
 
 // Initialize the app
-import bodyParser from 'body-parser';
-import express from 'express';
+var bodyParser = require('body-parser');
+var express = require('express');
+var logger = require('./app/modules/logger');
+// import bodyParser from 'body-parser';
+// import express from 'express';
 var app = express(); // create the app using express
 
 // Configure the app
@@ -11,8 +15,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // Initialize the routes
-// TODO
+// TODO: test
+
+logger.info('Hello world!');
+logger.warning('This is a warning!');
+logger.notice('This is a notice');
+logger.error('This is an error');
 
 // Start the API
 app.listen(port);
-console.log('DomoThink API listening on port ' + port);
+logger.info('DomoThink API listening on port %s', port);
