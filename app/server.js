@@ -5,8 +5,7 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import logger from './modules/logger';
-// import bodyParser from 'body-parser';
-// import express from 'express';
+
 var app = express(); // create the app using express
 
 // Configure the app

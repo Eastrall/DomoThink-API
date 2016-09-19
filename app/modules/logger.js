@@ -1,6 +1,6 @@
 // logger.js
 
-var winston = require('winston');
+import winston from 'winston';
 
 // Create the logger instance
 var logger = new (winston.Logger)({
@@ -22,4 +22,4 @@ var logger = new (winston.Logger)({
   }
 });
 
-module.exports = logger;
+export default logger;
