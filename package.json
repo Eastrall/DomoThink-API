@@ -2,10 +2,12 @@
   "name": "domothink-api",
   "version": "1.0.0",
   "description": "DomoThink Test API",
-  "main": "server.js",
+  "main": "app/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "clean": "rimraf dist",
+    "dev": "nodemon --exec babel-node app/server.js",
+    "prestart": "npm run clean && babel app --out-dir dist",
+    "start": "node dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +31,11 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
     "eslint": "^3.5.0",
-    "eslint-config-google": "^0.6.0"
+    "eslint-config-google": "^0.6.0",
+    "nodemon": "^1.10.2",
+    "rimraf": "^2.5.4"
   }
 }

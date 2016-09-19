@@ -2,9 +2,9 @@
 "use strict";
 
 // Initialize the app
-var bodyParser = require('body-parser');
-var express = require('express');
-var logger = require('./app/modules/logger');
+import bodyParser from 'body-parser';
+import express from 'express';
+import logger from './modules/logger';
 // import bodyParser from 'body-parser';
 // import express from 'express';
 var app = express(); // create the app using express
