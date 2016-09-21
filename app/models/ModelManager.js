@@ -19,10 +19,6 @@ class Manager {
     });
   }
 
-  getTest() {
-    return this.TestModel;
-  }
-
   setDb(db) {
     this.db = db;
   }
