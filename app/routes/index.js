@@ -1,7 +1,9 @@
-// Routes
+import express from 'express';
+import TestRoutes from './TestRoutes';
+import UserRoutes from './UserRoutes';
 
-import TestRoutes from './tests';
+const Routes = express.Router(); // eslint-disable-line new-cap
+Routes.use('/test', TestRoutes);
+Routes.use('/user', UserRoutes);
 
-export {
-  TestRoutes
-};
+export default Routes;

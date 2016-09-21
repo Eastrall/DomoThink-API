@@ -6,8 +6,8 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import logger from './modules/logger';
 import orm from 'orm';
-import ModelManager from './models/ModelManager';
-import {TestRoutes} from './routes';
+import DBModels from './models';
+import Routes from './routes';
 
 var app = express(); // create the app using express
 
@@ -31,8 +31,8 @@ const dbName = args[3];
 const db = orm.connect(`mysql://${username}:${password}@${host}/${dbName}`);
 db.on('connect', function(err) {
   if (err) return console.error('Connection error: ' + err);
-  ModelManager.setDb(db);
-  ModelManager.defineModels();
+  DBModels.setDb(db);
+  DBModels.defineModels();
 
   // connected
   const router = express.Router(); // eslint-disable-line new-cap
@@ -42,7 +42,7 @@ db.on('connect', function(err) {
 
   app.use(router);
 
-  router.use('/tests', TestRoutes);
+  router.use('/', Routes);
 });
 
 // Initialize the routes
