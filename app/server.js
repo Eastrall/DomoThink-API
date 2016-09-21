@@ -6,7 +6,8 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import logger from './modules/logger';
 import orm from 'orm';
-import {ModelInitializer} from './models';
+import ModelManager from './models/ModelManager';
+import {TestRoutes} from './routes';
 
 var app = express(); // create the app using express
 
@@ -30,10 +31,18 @@ const dbName = args[3];
 const db = orm.connect(`mysql://${username}:${password}@${host}/${dbName}`);
 db.on('connect', function(err) {
   if (err) return console.error('Connection error: ' + err);
-  const initializer = new ModelInitializer(db);
-  const testModel = initializer.defineTest();
-  console.log(testModel);
+  ModelManager.setDb(db);
+  ModelManager.defineModels();
+
   // connected
+  const router = express.Router(); // eslint-disable-line new-cap
+  router.get('/', function(req, res) {
+    res.send('Home page');
+  });
+
+  app.use(router);
+
+  router.use('/tests', TestRoutes);
 });
 
 // Initialize the routes
