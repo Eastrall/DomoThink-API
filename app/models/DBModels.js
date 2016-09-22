@@ -14,25 +14,13 @@ class Models {
   }
 
   defineModels() {
-    this.defineTest();
     this.defineUser();
   }
 
-  defineTest() {
-    this.TestModel = this.db.define('test', {
-      idtest: {type: 'serial', key: true},
-      name: {type: 'text'}
-    });
-  }
-
-  getTest() {
-    return this.TestModel;
-  }
-
   defineUser() {
-    this.UserModel = this.db.define('user', {
-      iduser: {type: 'serial', key: true},
-      name: {type: 'text'},
+    this.UserModel = this.db.define('users', {
+      userId: {type: 'serial', key: true},
+      username: {type: 'text'},
       password: {type: 'text'},
       boxKey: {type: 'text'}
     });

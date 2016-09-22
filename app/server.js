@@ -4,22 +4,17 @@
 // Import the modules
 import bodyParser from 'body-parser';
 import express from 'express';
-import orm from 'orm';
+// import orm from 'orm';
 import logger from './modules/logger';
-import DBModels from './models';
-import Routes from './routes';
+// import DBModels from './models';
+import routes from './routes';
+import database from './modules/database';
 
-var app = express(); // create the app using express
-
-// Configure the app
-var port = 8081;
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-
+const port = 8081;
 const args = process.argv.slice(2);
 
 if (args.length !== 4) {
-  console.log("Usage: npm start 'username' 'password' 'hostname' 'database name'");
+  logger.notice("Usage: npm start 'username' 'password' 'host' 'db name'");
   process.exit(1);
 }
 
@@ -30,23 +25,22 @@ const dbName = args[3];
 
 logger.info('DomoThink API is starting...');
 
-// Connection
-const db = orm.connect(`mysql://${username}:${password}@${host}/${dbName}`);
-db.on('connect', function(err) {
-  if (err)
-    return console.error('Connection error: ' + err);
+// Database connection
+database.setType('mysql');
+database.connect(username, password, host, dbName);
 
-  DBModels.setDb(db);
-  DBModels.defineModels();
-});
-
+// Initialize the router
 const router = express.Router(); // eslint-disable-line new-cap
 router.get('/', function(req, res) {
   res.send('Home page');
 });
 
+// Configure application
+let app = express();
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(router);
-router.use('/', Routes);
+router.use('/', routes);
 
 // Start the API
 app.listen(port);
