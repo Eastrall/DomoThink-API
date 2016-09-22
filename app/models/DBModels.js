@@ -1,3 +1,9 @@
+/**
+ * DBModels.js
+ * Defines the database models.
+ *
+ */
+
 let instance = null;
 
 class Models {

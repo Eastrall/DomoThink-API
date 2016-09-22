@@ -1,15 +1,18 @@
-// logger.js
+/**
+ * logger.js
+ * Custom logger using winstonjs library.
+ *
+ */
 
 import winston from 'winston';
 
-// Create the logger instance
-var logger = new (winston.Logger)({
+const logger = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
       colorize: true
     }),
     new (winston.transports.File)({
-      filename: 'somefile.log'
+      filename: 'domothink-api.log'
     })
   ],
   levels: winston.config.syslog.levels,
@@ -18,7 +21,8 @@ var logger = new (winston.Logger)({
     warning: 'yellow',
     error: 'red',
     debug: 'blue',
-    notice: 'cyan'
+    notice: 'cyan',
+    request: 'gray'
   }
 });
 

@@ -1,9 +1,24 @@
+/**
+ * index.js
+ * Defines all the API routes.
+ *
+ */
+
 import express from 'express';
-import TestRoutes from './TestRoutes';
-import UserRoutes from './UserRoutes';
+import users from './users';
+// import objects from './objects';
+// import directives from './directives';
 
-const Routes = express.Router(); // eslint-disable-line new-cap
-Routes.use('/test', TestRoutes);
-Routes.use('/user', UserRoutes);
+const routes = express.Router(); // eslint-disable-line new-cap
 
-export default Routes;
+// User management routes
+routes.get('/user', users.getAllUsers);
+routes.get('/user/:id', users.getUser);
+routes.post('/user', users.createUser);
+routes.put('/user', users.updateUser);
+routes.delete('/user', users.deleteUser);
+
+// Object management routes
+// Directive management routes
+
+export default routes;
