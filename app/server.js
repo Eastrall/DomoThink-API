@@ -1,14 +1,17 @@
-// server.js
+/**
+ * server.js
+ * Entry point of the DomoThink API.
+ *
+ */
 "use strict";
 
 // Import the modules
 import bodyParser from 'body-parser';
 import express from 'express';
-// import orm from 'orm';
 import logger from './modules/logger';
-// import DBModels from './models';
 import routes from './routes';
 import database from './modules/database';
+import authRequest from './middlewares/authRequest';
 
 const port = 8081;
 const args = process.argv.slice(2);
@@ -39,6 +42,12 @@ router.get('/', function(req, res) {
 let app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+
+// find a better implementation like: app.use('/api/*', authRequest);s
+app.all('/user', authRequest);
+app.all('/user/*', authRequest);
+// app.all('/devices/*', authRequest);
+// app.all('/directives/*', authRequest);
 app.use(router);
 router.use('/', routes);
 
