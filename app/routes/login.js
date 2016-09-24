@@ -27,22 +27,25 @@ class Login {
       return httpCode.error404(res, "Invalid credentials");
 
     dbModels.UserModel.one(
-       {username: username, password: password}, function(err, result) {
-         if (err)
-           return httpCode.error404(res, 'Error');
+      {
+        username: username,
+        password: password
+      }, (err, result) => {
+      if (err)
+        return httpCode.error404(res, 'Error');
 
-         if (!result || Object.keys(result).length === 0) {
-           logger.warning('Cannot find user "' + username + '" in database.');
-           return httpCode.error404(res, 'User not found.');
-         }
+      if (!result || Object.keys(result).length === 0) {
+        logger.warning('Cannot find user "' + username + '" in database.');
+        return httpCode.error404(res, 'User not found.');
+      }
 
-         logger.notice('User "' + username + '" found.');
-         return res.json({
-           status: 200,
-           token: generateToken(2),
-           username: username
-         });
-       });
+      logger.notice('User "' + username + '" found.');
+      return res.json({
+        status: 200,
+        token: generateToken(2),
+        username: username
+      });
+    });
   }
 
   logout() {

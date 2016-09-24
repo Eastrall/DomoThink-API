@@ -7,6 +7,7 @@
 import express from 'express';
 import login from './login';
 import users from './users';
+import devices from './devices';
 // import devices from './devices';
 // import directives from './directives';
 // import box from './box';
@@ -18,6 +19,10 @@ const routes = express.Router(); // eslint-disable-line new-cap
 // Login route. Everyone can access this route
 routes.post('/login', login.login);
 routes.post('/logout', login.logout);
+
+// Devices route.
+routes.get('/devices', devices.get);
+routes.post('/devices', devices.post);
 
 // User management routes
 routes.get('/user', users.getAllUsers);

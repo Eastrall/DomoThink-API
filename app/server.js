@@ -40,7 +40,8 @@ app.use(bodyParser.json());
 // find a better implementation like: app.use('/api/*', authRequest);s
 app.all('/user', authRequest);
 app.all('/user/*', authRequest);
-// app.all('/devices/*', authRequest);
+app.all('/devices', authRequest);
+app.all('/devices/*', authRequest);
 // app.all('/directives/*', authRequest);
 app.use(router);
 router.use('/', routes);

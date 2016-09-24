@@ -15,6 +15,7 @@ class Models {
 
   defineModels() {
     this.defineUser();
+    this.defineDevices();
   }
 
   defineUser() {
@@ -26,8 +27,13 @@ class Models {
     });
   }
 
-  getUser() {
-    return this.UserModel;
+  defineDevices() {
+    this.DeviceModel = this.db.define('devices', {
+      idDevice: {type: 'serial', key: true},
+      name: {type: 'text'},
+      description: {type: 'text'},
+      status: Boolean
+    });
   }
 
   setDb(db) {
