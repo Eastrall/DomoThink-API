@@ -5,7 +5,7 @@
  */
 
  import logger from './../modules/logger';
- import httpError from './../modules/httpError';
+ import httpCode from './../modules/httpCode';
  import dbModels from './../models/DBModels';
 
  class Login {
@@ -15,20 +15,20 @@
      var password = req.body.password || '';
 
      if (username === '' || password === '')
-       return httpError.error401(res, "Invalid credentials");
+       return httpCode.error404(res, "Invalid credentials");
 
      dbModels.UserModel.one(
        {username: username, password: password}, function(err, result) {
          if (err)
-           return httpError.error401(res, 'Error');
+           return httpCode.error404(res, 'Error');
 
          if (!result || Object.keys(result).length === 0) {
            logger.warning('Cannot find user "' + username + '" in database.');
-           return httpError.error401(res, 'not found');
+           return httpCode.error404(res, 'User not found.');
          }
 
          logger.notice('User "' + username + '" found.');
-         return httpError.error401(res, 'found');
+         return httpCode.success(res);
        });
    }
 
@@ -36,6 +36,14 @@
      return true;
    }
 }
+
+ function generateToken(expirationTime) {
+   // Set the expiration time
+   var date = new Date();
+   date.setDate(date.getDate() + expirationTime);
+
+   // Create the token
+ }
 
  const login = new Login();
 

@@ -9,8 +9,9 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import logger from './modules/logger';
-import routes from './routes';
 import database from './modules/database';
+import config from './modules/config';
+import routes from './routes';
 import authRequest from './middlewares/authRequest';
 
 const port = 8081;
@@ -27,6 +28,9 @@ const host = args[2];
 const dbName = args[3];
 
 logger.info('DomoThink API is starting...');
+
+// Initialize API configuration
+config.initialize('api-config.ini');
 
 // Database connection
 database.setType('mysql');
