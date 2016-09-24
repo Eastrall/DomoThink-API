@@ -1,5 +1,5 @@
 /**
- * object.js
+ * devices.js
  * Managing objects
  *
  */
@@ -9,11 +9,26 @@ import httpCode from './../modules/httpCode';
 import dbModels from './../models/DBModels';
 
 class Devices {
+
+  /**
+   * /get route for devices
+   *
+   * @param {object} req The incoming request.
+   * @param {object} res The outgoing result.
+   * @returns {Array} result The devices in the database
+   */
   get(req, res) {
     dbModels.DeviceModel.all((err, result) => res.json(result));
     logger.notice("Getting devices");
   }
 
+  /**
+   * /post route for devices
+   *
+   * @param {object} req The incoming request. The new device is in the req.body
+   * @param {object} res The outgoing result.
+   * @returns {object} codeode The success/error code
+   */
   post(req, res) {
     dbModels.DeviceModel.create(req.body, (err, result) => {
       return (err ?
@@ -24,6 +39,13 @@ class Devices {
     logger.notice("Adding " + req.body.name + " to devices");
   }
 
+  /**
+   * /put route for devices
+   *
+   * @param {object} req The incoming request. The updated device is in the req.body
+   * @param {object} res The outgoing result.
+   * @returns {object} codeode The success/error code
+   */
   put(req, res) {
     console.log(req.body);
     dbModels.DeviceModel.one({idDevice: req.body.idDevice},
@@ -41,6 +63,13 @@ class Devices {
       });
   }
 
+  /**
+     * /delete route for devices
+     *
+     * @param {object} req The incoming request. The id of the removed device is in req.params.di
+     * @param {object} res The outgoing result.
+     * @returns {object} codeode The success/error code
+     */
   delete(req, res) {
     dbModels.DeviceModel.one({idDevice: req.params.id}, (error, device) => {
       if (!device) {
