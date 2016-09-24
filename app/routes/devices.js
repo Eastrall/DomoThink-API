@@ -24,15 +24,27 @@ class Devices {
     logger.notice("Adding " + req.body.name + " to devices");
   }
 
-  update(req, res) {
-
+  put(req, res) {
+    console.log(req.body);
+    dbModels.DeviceModel.one({idDevice: req.body.idDevice},
+      (error, device) => {
+        if (!device) {
+          return httpCode.error404(res, "Device not found");
+        }
+        device.save(req.body, err => {
+          return (err ?
+          httpCode.error500(res, 'Error: Could not update device') :
+          httpCode.success(res, "Device updated !")
+        );
+        });
+        logger.notice(`Updating device {${req.body.idDevice}}`);
+      });
   }
 
   delete(req, res) {
     dbModels.DeviceModel.one({idDevice: req.params.id}, (error, device) => {
-      console.log(device);
       if (!device) {
-        return httpCode.error400(res, "Device not found");
+        return httpCode.error404(res, "Device not found");
       }
       device.remove(err => {
         return (err ?

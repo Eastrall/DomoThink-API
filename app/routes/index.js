@@ -23,6 +23,7 @@ routes.post('/logout', login.logout);
 // Devices route.
 routes.get('/devices', devices.get);
 routes.post('/devices', devices.post);
+routes.put('/devices', devices.put);
 routes.delete('/devices/:id', devices.delete);
 
 // User management routes
