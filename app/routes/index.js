@@ -17,6 +17,7 @@ const routes = express.Router(); // eslint-disable-line new-cap
 
 // Login route. Everyone can access this route
 routes.post('/login', login.login);
+routes.post('/logout', login.logout);
 
 // User management routes
 routes.get('/user', users.getAllUsers);

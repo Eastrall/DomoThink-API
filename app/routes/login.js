@@ -4,20 +4,29 @@
  *
  */
 
- import logger from './../modules/logger';
- import httpCode from './../modules/httpCode';
- import dbModels from './../models/DBModels';
+import jwt from 'jwt-simple';
+import logger from './../modules/logger';
+import config from './../modules/config';
+import httpCode from './../modules/httpCode';
+import dbModels from './../models/DBModels';
 
- class Login {
+class Login {
 
-   login(req, res) {
-     var username = req.body.login || '';
-     var password = req.body.password || '';
+  /**
+   * Login route. Process the user login.
+   *
+   * @param {object} req The incoming request.
+   * @param {object} res The outgoing result.
+   * @return {object} errorCode The error code.
+   */
+  login(req, res) {
+    var username = req.body.login || '';
+    var password = req.body.password || '';
 
-     if (username === '' || password === '')
-       return httpCode.error404(res, "Invalid credentials");
+    if (username === '' || password === '')
+      return httpCode.error404(res, "Invalid credentials");
 
-     dbModels.UserModel.one(
+    dbModels.UserModel.one(
        {username: username, password: password}, function(err, result) {
          if (err)
            return httpCode.error404(res, 'Error');
@@ -28,23 +37,42 @@
          }
 
          logger.notice('User "' + username + '" found.');
-         return httpCode.success(res);
+         return res.json({
+           status: 200,
+           token: generateToken(2),
+           username: username
+         });
        });
-   }
+  }
 
-   validate(username, password) {
-     return true;
-   }
+  logout() {
+
+  }
+
+  validate(username, password) {
+    return true;
+  }
 }
 
- function generateToken(expirationTime) {
+/**
+ * Generates an authentification token with the secret key and the
+ * expiration time.
+ *
+ * @param {integer} expirationTime The token expiration time (in days).
+ * @return {object} token The generated token.
+ */
+function generateToken(expirationTime) {
    // Set the expiration time
-   var date = new Date();
-   date.setDate(date.getDate() + expirationTime);
+  var date = new Date();
+  date.setDate(date.getDate() + expirationTime);
 
    // Create the token
- }
+  var token = jwt.encode({
+    exp: date
+  }, config.Config.auth.secret);
 
- const login = new Login();
+  return token;
+}
 
- export default login;
+const login = new Login();
+export default login;

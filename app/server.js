@@ -14,27 +14,17 @@ import config from './modules/config';
 import routes from './routes';
 import authRequest from './middlewares/authRequest';
 
-const port = 8081;
-const args = process.argv.slice(2);
-
-if (args.length !== 4) {
-  logger.notice("Usage: npm start 'username' 'password' 'host' 'db name'");
-  process.exit(1);
-}
-
-const username = args[0];
-const password = args[1];
-const host = args[2];
-const dbName = args[3];
-
 logger.info('DomoThink API is starting...');
 
 // Initialize API configuration
-config.initialize('api-config.ini');
+config.initialize('config.ini');
 
 // Database connection
 database.setType('mysql');
-database.connect(username, password, host, dbName);
+database.connect(config.Config.database.username,
+                 config.Config.database.password,
+                 config.Config.database.host,
+                 config.Config.database.database);
 
 // Initialize the router
 const router = express.Router(); // eslint-disable-line new-cap
@@ -56,5 +46,5 @@ app.use(router);
 router.use('/', routes);
 
 // Start the API
-app.listen(port);
-logger.info('DomoThink API listening on port %s', port);
+app.listen(config.Config.global.port);
+logger.info('DomoThink API listening on port %s', config.Config.global.port);

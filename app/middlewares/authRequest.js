@@ -15,7 +15,7 @@ import logger from './../modules/logger';
  * @param {Object} next Next method.
  */
 function authorize(req, res, next) {
-  logger.info('auth request');
+  logger.request('New incoming request');
   next();
 }
 
