@@ -36,7 +36,7 @@ routes.get('/user', users.getAllUsers);
 routes.get('/user/:id', users.getUser);
 routes.post('/user', users.createUser);
 routes.put('/user', users.updateUser);
-routes.delete('/user', users.deleteUser);
+routes.delete('/user/:id', users.deleteUser);
 
 // Devices management routes
 // Directive management routes
