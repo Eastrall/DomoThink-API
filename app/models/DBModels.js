@@ -16,6 +16,7 @@ class Models {
   defineModels() {
     this.defineUser();
     this.defineDevices();
+    this.defineDirectives();
   }
 
   defineUser() {
@@ -33,6 +34,13 @@ class Models {
       name: {type: 'text'},
       description: {type: 'text'},
       status: Boolean
+    });
+  }
+
+  defineDirectives() {
+    this.DirectiveModel = this.db.define('directives', {
+      idDirective: {type: 'serial', key: true}
+      // Reste
     });
   }
 

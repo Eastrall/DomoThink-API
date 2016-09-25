@@ -64,7 +64,7 @@ class Devices {
   }
 
   /**
-     * /delete route for devices
+     * /delete route for devices. Still need to remove the directives linked to this device when it's removed
      *
      * @param {object} req The incoming request. The id of the removed device is in req.params.di
      * @param {object} res The outgoing result.
