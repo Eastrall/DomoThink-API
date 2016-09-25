@@ -5,7 +5,7 @@
  *
  */
 
- import logger from 'logger';
+ import logger from './logger';
 
  class HttpCode {
 
