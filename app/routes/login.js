@@ -26,11 +26,7 @@ class Login {
     if (username === '' || password === '')
       return httpCode.error404(res, "Invalid credentials");
 
-    dbModels.UserModel.one(
-      {
-        username: username,
-        password: password
-      }, (err, result) => {
+    this.getUser(username, password, (err, result) => {
       if (err)
         return httpCode.error404(res, 'Error');
 
@@ -52,8 +48,15 @@ class Login {
 
   }
 
-  validate(username, password) {
-    return true;
+  getUser(username, password, callback) {
+    dbModels.UserModel.one(
+      {
+        username: username,
+        password: password
+      },
+      (err, result) => {
+        callback(err, result);
+      });
   }
 }
 

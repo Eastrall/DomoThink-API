@@ -1,1 +1,6 @@
-extends: "google"
+{
+  extends: "google",
+  rules: {
+      "linebreak-style": ["error", "windows"]
+    }
+}
