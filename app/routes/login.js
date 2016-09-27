@@ -49,8 +49,15 @@ class Login {
         });
   }
 
-  logout() {
-
+  /**
+   * Logout route. Process the user logout.
+   *
+   * @param {object} req The request data.
+   * @param {object} res The request result.
+   * @return {httpCode} code The http code.
+   */
+  logout(req, res) {
+    return httpCode.success(res, 'logout success');
   }
 }
 
