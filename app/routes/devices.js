@@ -8,6 +8,25 @@ import logger from './../modules/logger';
 import httpCode from './../modules/httpCode';
 import dbModels from './../models/DBModels';
 
+const deleteLinkedDirectives = deviceId => {
+  dbModels.DirectiveModel.find({deviceId},
+    (error, directives) => {
+      console.log("Directives", directives);
+      if (!directives || directives.length === 0) {
+        return 'No linked directives';
+      }
+      directives.forEach(directive => {
+        directive.remove(err => {
+          return (err ?
+          `Could not remove directive ${directive.idDirective}` :
+          `Removed ${directive.idDirective}`);
+        });
+      });
+      logger.notice(`Removing linked directives`);
+    }
+  );
+};
+
 class Devices {
 
   /**
@@ -76,6 +95,9 @@ class Devices {
         return httpCode.error404(res, "Device not found");
       }
       device.remove(err => {
+        if (!err) {
+          deleteLinkedDirectives(req.params.id);
+        }
         return (err ?
           httpCode.error500(res, 'Error: Could not remove device') :
           httpCode.success(res, "Device removed !")

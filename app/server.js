@@ -41,9 +41,10 @@ app.use(bodyParser.json());
 app.all('/user', authRequest);
 app.all('/user/*', authRequest);
 app.all('/devices', authRequest);
-app.all('/devices/*', authRequest);
+app.all('/devices/*');
 app.all('/directives', authRequest);
 app.all('/directives/*', authRequest);
+
 app.use(router);
 router.use('/', routes);
 

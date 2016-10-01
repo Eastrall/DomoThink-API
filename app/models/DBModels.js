@@ -39,7 +39,13 @@ class Models {
 
   defineDirectives() {
     this.DirectiveModel = this.db.define('directives', {
-      idDirective: {type: 'serial', key: true}
+      idDirective: {type: 'serial', key: true},
+      name: {type: 'text'},
+      creatorId: {type: 'number'},
+      deviceId: {type: 'number'},
+      actionId: {type: 'number'},
+      periodicityType: {type: 'number'},
+      periodicityData: {type: 'text'}
       // Reste
     });
   }
