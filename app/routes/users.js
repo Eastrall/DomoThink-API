@@ -4,10 +4,32 @@
  *
  */
 
-import dbModels from './../models/DBModels';
 import logger from './../modules/logger';
+import dbModels from './../models/DBModels';
+import httpCode from './../modules/httpCode';
 
 class Users {
+
+  /**
+   * Change password route. Allows the user to change it's password.
+   *
+   * @param {object} req The request data.
+   * @param {object} res The request result.
+   * @return {httpCode} code The http code.
+   */
+  changePassword(req, res) {
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return httpCode.error400(res, "Passwords do not match");
+    }
+    dbModels.UserModel.one({userId: req.body.userId, password: req.body.oldPassword}, (err, user) => {
+      user.save({password: req.body.newPassword}, err => {
+        return (err ?
+          httpCode.error500(res, 'Error: Could not update device') :
+          httpCode.success(res, "Device updated !")
+        );
+      });
+    });
+  }
 
   getAllUsers(req, res) {
     logger.notice('getAllUsers');

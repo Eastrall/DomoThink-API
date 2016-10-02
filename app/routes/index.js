@@ -37,6 +37,7 @@ routes.get('/user/:id', users.getUser);
 routes.post('/user', users.createUser);
 routes.put('/user', users.updateUser);
 routes.delete('/user/:id', users.deleteUser);
+routes.post('/user/change_password', users.changePassword);
 
 // Plugins management routes
 // Box management routes

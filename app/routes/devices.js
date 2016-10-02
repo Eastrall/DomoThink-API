@@ -74,9 +74,9 @@ class Devices {
         }
         device.save(req.body, err => {
           return (err ?
-          httpCode.error500(res, 'Error: Could not update device') :
-          httpCode.success(res, "Device updated !")
-        );
+            httpCode.error500(res, 'Error: Could not update device') :
+            httpCode.success(res, "Device updated !")
+          );
         });
         logger.notice(`Updating device {${req.body.idDevice}}`);
       });
