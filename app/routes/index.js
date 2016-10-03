@@ -17,6 +17,7 @@ const routes = express.Router(); // eslint-disable-line new-cap
 
 // Login routes. Everyone can access this route
 routes.post('/login', login.login);
+routes.post('/create_account', users.createAccount);
 routes.post('/logout', login.logout);
 
 // Devices routes.
