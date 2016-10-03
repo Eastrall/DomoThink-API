@@ -17,6 +17,7 @@ class Models {
     this.defineUser();
     this.defineDevices();
     this.defineDirectives();
+    this.defineStorePlugins();
   }
 
   defineUser() {
@@ -46,6 +47,17 @@ class Models {
       actionId: {type: 'number'},
       periodicityType: {type: 'number'},
       periodicityData: {type: 'text'}
+      // Reste
+    });
+  }
+
+  defineStorePlugins() {
+    this.StorePluginsModel = this.db.define('store_plugins', {
+      idPlugin: {type: 'serial', key: true},
+      name: {type: 'text'},
+      repository: {type: 'text'},
+      language: {type: 'text'},
+      date: {type: "date", time: false}
       // Reste
     });
   }
