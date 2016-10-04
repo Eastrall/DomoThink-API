@@ -39,6 +39,7 @@ routes.delete('/plugins/uninstall/:id', plugins.uninstall);
 
 // Store routes.
 routes.get('/store', store.get);
+routes.get('/store/:id', store.getPlugin);
 routes.post('/store', store.post);
 routes.put('/store', store.put);
 

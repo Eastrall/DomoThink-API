@@ -22,6 +22,20 @@ class Store {
     logger.notice("Getting Store plugins");
   }
 
+  getPlugin(req, res) {
+    dbModels.StorePluginsModel.one({idPlugin: req.params.id},
+      (error, plugin) => {
+        if (!plugin) {
+          return httpCode.error404(res, "Plugin not found");
+        }
+        console.log("PLUGIN", plugin);
+        plugin.getStoreplugincomments((err, data) => {
+          return (err ? httpCode.error500(res, "Could not find plugin details") :
+          res.json(plugin));
+        });
+      });
+  }
+
   /**
    * /post route for devices
    *
