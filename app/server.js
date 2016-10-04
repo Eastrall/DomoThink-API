@@ -49,5 +49,5 @@ app.use(router);
 router.use('/', routes);
 
 // Start the API
-app.listen(config.Config.global.port);
+app.listen(config.Config.global.port); // If crashing on this line, the API is probably already running somewhere else
 logger.info('DomoThink API listening on port %s', config.Config.global.port);

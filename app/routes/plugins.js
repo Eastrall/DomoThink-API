@@ -5,6 +5,7 @@
  */
 
 import fs from 'fs';
+import path from 'path';
 import httpCode from './../modules/httpCode';
 import logger from './../modules/logger';
 import Git from 'nodegit';
@@ -16,6 +17,21 @@ const mkdirSync = path => {
   } catch (e) {
     throw e;
   }
+};
+
+const rmdirSync = dir => {
+  var list = fs.readdirSync(dir);
+  for (var i = 0; i < list.length; i++) {
+    var filename = path.join(dir, list[i]);
+    var stat = fs.statSync(filename);
+    if (filename === "." || filename === "..") {
+    } else if (stat.isDirectory()) {
+      rmdirSync(filename);
+    } else {
+      fs.unlinkSync(filename);
+    }
+  }
+  fs.rmdirSync(dir);
 };
 
 class Plugins {
@@ -43,6 +59,15 @@ class Plugins {
       logger.error("Unable to clone plugin");
       return httpCode.error500(res, "Unable to clone plugin");
     });
+  }
+
+  uninstall(req, res) {
+    try {
+      rmdirSync(`${process.cwd()}/plugins/${req.body.name}/`);
+    } catch (e) {
+      return httpCode.error404(res, 'Plugin not found');
+    }
+    return httpCode.success(res, "Plugin removed");
   }
 }
 
