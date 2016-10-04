@@ -19,7 +19,7 @@ class Store {
    */
   get(req, res) {
     dbModels.StorePluginsModel.all((err, result) => res.json(result));
-    logger.notice("Getting plugins");
+    logger.notice("Getting Store plugins");
   }
 
   /**
@@ -36,7 +36,7 @@ class Store {
         httpCode.success(res, req.body.name + " added !")
       );
     });
-    logger.notice("Adding " + req.body.name + " to devices");
+    logger.notice("Adding " + req.body.name + " to the store");
   }
 
   /**
@@ -47,19 +47,18 @@ class Store {
    * @returns {object} codeode The success/error code
    */
   put(req, res) {
-    console.log(req.body);
-    dbModels.StorePluginsModel.one({idDevice: req.body.idDevice},
-      (error, device) => {
-        if (!device) {
-          return httpCode.error404(res, "Device not found");
+    dbModels.StorePluginsModel.one({idPlugin: req.body.idPlugin},
+      (error, plugin) => {
+        if (!plugin) {
+          return httpCode.error404(res, "Plugin not found");
         }
-        device.save(req.body, err => {
+        plugin.save(req.body, err => {
           return (err ?
-            httpCode.error500(res, 'Error: Could not update device') :
-            httpCode.success(res, "Device updated !")
+            httpCode.error500(res, 'Error: Could not update Store plugin') :
+            httpCode.success(res, "Plugin updated !")
           );
         });
-        logger.notice(`Updating device {${req.body.idDevice}}`);
+        logger.notice(`Updating plugin {${req.body.idPlugin}}`);
       });
   }
 
@@ -71,20 +70,17 @@ class Store {
      * @returns {object} codeode The success/error code
      */
   delete(req, res) {
-    dbModels.StorePluginsModel.one({idDevice: req.params.id}, (error, device) => {
-      if (!device) {
-        return httpCode.error404(res, "Device not found");
+    dbModels.StorePluginsModel.one({idPlugin: req.params.id}, (error, plugin) => {
+      if (!plugin) {
+        return httpCode.error404(res, "Plugin not found");
       }
-      device.remove(err => {
-        if (!err) {
-          deleteLinkedDirectives(req.params.id);
-        }
+      plugin.remove(err => {
         return (err ?
-          httpCode.error500(res, 'Error: Could not remove device') :
-          httpCode.success(res, "Device removed !")
+          httpCode.error500(res, 'Error: Could not remove plugin') :
+          httpCode.success(res, "Plugin removed !")
         );
       });
-      logger.notice(`Removing device {${req.params.id}}`);
+      logger.notice(`Removing plugin {${req.params.id}}`);
     });
   }
 

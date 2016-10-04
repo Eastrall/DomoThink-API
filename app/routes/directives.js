@@ -47,7 +47,6 @@ class Directives {
    * @returns {object} codeode The success/error code
    */
   put(req, res) {
-    console.log(req.body);
     dbModels.DirectiveModel.one({idDirective: req.body.idDirective},
       (error, directive) => {
         if (!directive) {

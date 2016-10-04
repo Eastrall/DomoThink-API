@@ -66,7 +66,6 @@ class Devices {
    * @returns {object} codeode The success/error code
    */
   put(req, res) {
-    console.log(req.body);
     dbModels.DeviceModel.one({idDevice: req.body.idDevice},
       (error, device) => {
         if (!device) {
