@@ -18,6 +18,7 @@ class Models {
     this.defineDevices();
     this.defineDirectives();
     this.defineStorePlugins();
+    this.defineLocalPlugins();
   }
 
   defineUser() {
@@ -47,6 +48,15 @@ class Models {
       actionId: {type: 'number'},
       periodicityType: {type: 'number'},
       periodicityData: {type: 'text'}
+      // Reste
+    });
+  }
+
+  defineLocalPlugins() {
+    this.PluginModel = this.db.define('plugins', {
+      idPlugin: {type: 'serial', key: true},
+      name: {type: 'text'},
+      status: Boolean
       // Reste
     });
   }

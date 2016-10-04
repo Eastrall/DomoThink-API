@@ -9,6 +9,7 @@ import path from 'path';
 import httpCode from './../modules/httpCode';
 import logger from './../modules/logger';
 import Git from 'nodegit';
+import dbModels from './../models/DBModels';
 import {dirs} from '../common';
 
 const mkdirSync = path => {
@@ -36,38 +37,55 @@ const rmdirSync = dir => {
 
 class Plugins {
   get(req, res) {
-    const pluginConfigs = dirs('./plugins').map(dir => `${process.cwd()}/plugins/${dir}/.domothinkrc.json`);
-    let plugins = [];
-    pluginConfigs.forEach(configUrl => {
-      plugins.push(require(configUrl));
-    });
-    return (plugins.length === 0 ? httpCode.error404(res, "No plugins found") :
-      res.send(plugins)
-    );
+    // const pluginConfigs = dirs('./plugins').map(dir => `${process.cwd()}/plugins/${dir}/.domothinkrc.json`);
+    // let plugins = [];
+    // pluginConfigs.forEach(configUrl => {
+    //   plugins.push(require(configUrl));
+    // });
+    // return (plugins.length === 0 ? httpCode.error404(res, "No plugins found") :
+    //   res.send(plugins)
+    // );
+    dbModels.PluginModel.all((err, result) => res.json(result));
+    logger.notice("Getting plugins");
   }
 
   install(req, res) {
     try {
-      mkdirSync(`${process.cwd()}/plugins/${req.body.name}`);
+//      mkdirSync(`${process.cwd()}/plugins/${req.body.name}`);
+      Git.Clone(req.body.repository, `${process.cwd()}/plugins/${req.body.name}`).then(repository => { // eslint-disable-line new-cap
+        logger.info("Plugin downloaded");
+        dbModels.PluginModel.create(req.body, (err, result) => {
+          if (err) {
+            rmdirSync(`${process.cwd()}/plugins/${req.body.name}/`);
+            return httpCode.error404(res, 'Error: Bad parameters');
+          }
+          return httpCode.success(res, `Plugin ${req.body.name} installed !`);
+        });
+      }).catch(e => {
+        logger.error("Unable to clone plugin");
+        return httpCode.error500(res, "Unable to clone plugin");
+      });
     } catch (e) {
       return httpCode.error400(res, 'Plugin folder already exists');
     }
-    Git.Clone(req.body.repository, `${process.cwd()}/plugins/${req.body.name}`).then(function(repository) { // eslint-disable-line new-cap
-      logger.info("Plugin installed");
-      return httpCode.success(res, "Plugin installed");
-    }).catch(e => {
-      logger.error("Unable to clone plugin");
-      return httpCode.error500(res, "Unable to clone plugin");
-    });
   }
 
   uninstall(req, res) {
-    try {
-      rmdirSync(`${process.cwd()}/plugins/${req.body.name}/`);
-    } catch (e) {
-      return httpCode.error404(res, 'Plugin not found');
-    }
-    return httpCode.success(res, "Plugin removed");
+    dbModels.PluginModel.one({idPlugin: req.params.id}, (err, plugin) => {
+      if (!plugin || err) {
+        return httpCode.error404(res, "Plugin not found");
+      }
+      plugin.remove(err => {
+        if (err)
+          return httpCode.error500(res, 'Error: Could not remove device');
+        try {
+          rmdirSync(`${process.cwd()}/plugins/${plugin.name}/`);
+          return httpCode.success(res, `Plugin ${plugin.name} removed`);
+        } catch (e) {
+          return httpCode.error404(res, 'Plugin not found');
+        }
+      });
+    });
   }
 }
 
