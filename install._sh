@@ -1,0 +1,69 @@
+#!bin/sh
+
+#
+# Author: Filipe GOMES PEIXOTO <gomespeixoto.filipe@gmail.com>
+# DomoThink API setup script
+#
+
+echo "## DomoThink ##"
+echo "Starting installation..."
+
+## UPDATE / UPGRADE PACKAGES ##
+
+sudo -s
+apt-get update -y
+apt-get upgrade -y
+
+## INSTALL TOOLS ##
+
+echo "Installing tools..."
+apt-get install -y emacs git
+echo "Tools installed!"
+
+## INSTALL NODE.JS ##
+
+echo "Installing node.js..."
+curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+apt-get install -y nodejs
+apt-get install -y build-essential
+echo "Node.js installed!"
+
+## INSTALL AND CONFIGURE MYSQL SERVER ##
+
+echo "Installing mysql-server and mysql-client..."
+
+# prepare root user
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password password_root'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password_root'
+
+# install mysql server and client
+apt-get install -y mysql-server mysql-client
+/etc/init.d/mysql stop # stop the service
+mysql --bind-address="0.0.0.0"
+/etc/init.d/mysql start # start the service
+
+echo "mysql-server and mysql-client installed!"
+echo "Creating MySQL users..."
+
+mysql -e CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
+mysql -e CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
+
+# TODO: execute SQL script for database creation
+mysql -e CREATE DATABASE 'domothink';
+
+echo "MySQL is now configured!"
+
+## INSTALL POSTGRESQL ##
+
+# TODO
+
+## INSTALL API ##
+
+# Compile app with babel
+
+# Configure API
+
+# Create daemon service
+
+## END ##
+echo "DomoThink has been installed with success!"
