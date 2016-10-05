@@ -1,0 +1,943 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "Beta",
+    "title": "Domothink-API"
+  },
+  "definitions": {
+    "periodicity": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "directive": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "creatorId": {
+          "type": "number"
+        },
+        "objectId": {
+          "type": "number"
+        },
+        "actionId": {
+          "type": "number"
+        },
+        "periodicity": {
+          "$ref": "#/definitions/periodicity"
+        }
+      }
+    },
+    "boxInformations": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "ownerId": {
+          "type": "number"
+        },
+        "data": {
+          "type": "object"
+        }
+      }
+    },
+    "plugin": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "activate": {
+          "type": "boolean"
+        }
+      }
+    },
+    "device": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "activate": {
+          "type": "boolean"
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id_objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/device"
+          }
+        }
+      }
+    },
+    "connectionInfos": {
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "changePasswordInfos": {
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "number"
+        },
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "accountCreation": {
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
+          "type": "string"
+        },
+        "boxKey": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "host": "89.156.144.51:4242",
+  "tags": [
+    {
+      "name": "user",
+      "description": "For user interactions"
+    },
+    {
+      "name": "directive",
+      "description": "For the device's directives (instructions)"
+    },
+    {
+      "name": "update",
+      "description": "Manages the updates of the Domobox"
+    },
+    {
+      "name": "store",
+      "description": "All about the plugin store"
+    },
+    {
+      "name": "plugin",
+      "description": "Plugin management"
+    },
+    {
+      "name": "device",
+      "description": "CRUD of the devices"
+    }
+  ],
+  "paths": {
+    "/user/auth": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Authentifie l'utilisateur",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Connection informations",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/connectionInfos"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "token",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/user/forgotten_password/": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Envoie un mail Ã  l'utilisateur pour",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "description": "Login de l'utilisateur",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful response. Email sent."
+          }
+        }
+      }
+    },
+    "/user/change_password": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Authentifie l'utilisateur",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Connection informations",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/changePasswordInfos"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "token",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/user/create_account": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Account Creation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Creation informations",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/accountCreation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response. Activation email sent.",
+            "schema": {
+              "title": "token",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/user/infosBox?token={token}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Get les informations de la box de l'utilisateur",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "Token of the logged user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "array",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/boxInformations"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Logout l'utilisateur loggÃ©",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Token of the logged user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/directive": {
+      "get": {
+        "tags": [
+          "directive"
+        ],
+        "description": "Authentifie l'utilisateur",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "array",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/directive"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "directive"
+        ],
+        "description": "CrÃ©er une directive",
+        "parameters": [
+          {
+            "name": "directive",
+            "in": "body",
+            "description": "Directive Ã  crÃ©er",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/directive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "id",
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "/directive/{id}": {
+      "get": {
+        "tags": [
+          "directive"
+        ],
+        "description": "Get la directive en fonction de l'id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id de la directive",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/directive"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "directive"
+        ],
+        "description": "Edite la directive en fonction de l'id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id de la directive Ã  modifier",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "directive",
+            "in": "body",
+            "description": "Directive Ã  modifier",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/directive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "number",
+              "title": "Id de la directive"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "directive"
+        ],
+        "description": "Get la directive en fonction de l'id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id de la directive Ã  modifier",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "directive",
+            "in": "body",
+            "description": "Directive Ã  supprimer",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/directive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/update/{boxVersion}": {
+      "get": {
+        "tags": [
+          "update"
+        ],
+        "description": "Permet de savoir si il y a une update ou non",
+        "parameters": [
+          {
+            "name": "boxVersion",
+            "in": "path",
+            "description": "Version de la box",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "newVersion",
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "/update/dl": {
+      "get": {
+        "tags": [
+          "update"
+        ],
+        "description": "Renvoie la derniÃ¨re version",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "data",
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "/store": {
+      "get": {
+        "tags": [
+          "store"
+        ],
+        "description": "renvoie tout les plugins du store",
+        "responses": {
+          "200": {
+            "description": "Succesful response",
+            "schema": {
+              "title": "array",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/plugin"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/{plugin_id}": {
+      "get": {
+        "tags": [
+          "store"
+        ],
+        "description": "renvoie un plugin ainsi que ca description",
+        "parameters": [
+          {
+            "name": "plugin_id",
+            "in": "path",
+            "description": "id du plugin",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Suceesful response",
+            "schema": {
+              "$ref": "#/definitions/plugin"
+            }
+          }
+        }
+      }
+    },
+    "/store/install/{plugin_id}": {
+      "post": {
+        "tags": [
+          "store"
+        ],
+        "description": "installer un plugin",
+        "parameters": [
+          {
+            "name": "plugin_id",
+            "in": "path",
+            "description": "id du plugin",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful response"
+          }
+        }
+      }
+    },
+    "/store/uninstall/{plugin_id}": {
+      "post": {
+        "tags": [
+          "store"
+        ],
+        "description": "desinstaller un plugin",
+        "parameters": [
+          {
+            "name": "plugin_id",
+            "in": "path",
+            "description": "id du plugin",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful response"
+          }
+        }
+      }
+    },
+    "/plugin": {
+      "get": {
+        "tags": [
+          "plugin"
+        ],
+        "description": "renvoie tout les plugins installer",
+        "responses": {
+          "200": {
+            "description": "Successul response",
+            "schema": {
+              "title": "array",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/plugin"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plugin/activate/{id}": {
+      "get": {
+        "tags": [
+          "plugin"
+        ],
+        "description": "Activer le plugin",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id du plugin Ã  activer",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/plugin/desactivate/{id}": {
+      "get": {
+        "tags": [
+          "plugin"
+        ],
+        "description": "Desactiver le plugin",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id du plugin Ã  dÃ©sactiver",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/device": {
+      "get": {
+        "tags": [
+          "device"
+        ],
+        "description": "get tout les object",
+        "responses": {
+          "200": {
+            "description": "Sucessful response",
+            "schema": {
+              "title": "array",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/device"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "description": "ajouter un object",
+        "parameters": [
+          {
+            "name": "device",
+            "in": "body",
+            "description": "object a ajouter",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/device"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessfull response"
+          }
+        }
+      }
+    },
+    "/device/{id}": {
+      "get": {
+        "tags": [
+          "device"
+        ],
+        "description": "Get un object en fonction de l'id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id object",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/device"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "device"
+        ],
+        "description": "Edite un object en fonction de l'id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id de la directive Ã  modifier",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "device",
+            "in": "body",
+            "description": "device Ã  modifier",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/device"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "number",
+              "title": "Id object"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "device"
+        ],
+        "description": "object a supprimer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id object a supprimer",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/device/group": {
+      "get": {
+        "tags": [
+          "device"
+        ],
+        "description": "get tout les group",
+        "responses": {
+          "200": {
+            "description": "Sucessful response",
+            "schema": {
+              "title": "array",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/group"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "description": "ajouter un groupe",
+        "parameters": [
+          {
+            "name": "device",
+            "in": "body",
+            "description": "ajouter un groupe",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessfull response"
+          }
+        }
+      }
+    },
+    "/device/group/{id_group}": {
+      "get": {
+        "tags": [
+          "device"
+        ],
+        "description": "get un group",
+        "parameters": [
+          {
+            "name": "id_group",
+            "in": "path",
+            "description": "id du group",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucessful response",
+            "schema": {
+              "$ref": "#/definitions/group"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "description": "ajouter un device a un groupe",
+        "parameters": [
+          {
+            "name": "id_group",
+            "in": "path",
+            "description": "ID du groupe",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "device",
+            "in": "body",
+            "description": "Device a ajouter au groupe",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/device"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "device"
+        ],
+        "description": "delete d'un group",
+        "parameters": [
+          {
+            "name": "id_group",
+            "in": "path",
+            "description": "Id de la directive Ã  modifier",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "name": "device",
+            "in": "body",
+            "description": "Device Ã  supprimer d'un group",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/directive"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  }
+}

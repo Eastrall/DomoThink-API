@@ -1,0 +1,21 @@
+{
+  "name": "domothink",
+  "version": "1.0.0",
+  "description": "eip",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  },
+  "scripts": {
+    "start" : "http-server ./webapp" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsthibault/Domo-Think-EIP.git"
+  },
+  "author": "munsch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsthibault/Domo-Think-EIP/issues"
+  },
+  "homepage": "https://github.com/jsthibault/Domo-Think-EIP#readme"
+}
