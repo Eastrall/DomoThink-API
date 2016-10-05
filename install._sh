@@ -48,8 +48,8 @@ echo "Creating MySQL users..."
 mysql -e CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
 mysql -e CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
 
-# TODO: execute SQL script for database creation
-mysql -e CREATE DATABASE 'domothink';
+# execute SQL script for database creation
+mysql -u root -p root_password < database.sql
 
 echo "MySQL is now configured!"
 
@@ -59,7 +59,16 @@ echo "MySQL is now configured!"
 
 ## INSTALL API ##
 
+# Clone app from github
+
+cd /var
+git clone https://github.com/Eastrall/DomoThink-Test-API
+mv DomoThink-Test-API domothink
+
 # Compile app with babel
+cd /var/domothink
+npm install
+npm start
 
 # Configure API
 

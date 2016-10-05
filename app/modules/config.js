@@ -63,9 +63,9 @@
 
      conf.database = {
        host: 'localhost',
-       username: 'root',
-       password: 'fake_password',
-       database: 'local_database'
+       username: 'domo',
+       password: 'default_password',
+       database: 'domothink'
      };
 
      fs.writeFileSync(this.file, ini.stringify(conf));
