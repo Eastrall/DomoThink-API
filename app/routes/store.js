@@ -18,7 +18,28 @@ class Store {
    * @returns {Array} result The devices in the database
    */
   get(req, res) {
-    dbModels.StorePluginsModel.all((err, result) => res.json(result));
+    let counter = 0;
+    dbModels.StorePluginsModel.all((err, result) => {
+      if (err || result.length === 0)
+        return httpCode.error404(res, 'No plugin found.');
+      result.forEach(plugin => {
+        plugin.getStoreplugincomments((error, data) => {
+          counter += 1;
+          if (data.length > 0) {
+            let rate = 0;
+            plugin.storeplugincomments.forEach((comment, index, arr) => {
+              rate += comment.rate;
+            });
+            rate /= plugin.storeplugincomments.length;
+            plugin.rate = rate;
+          }
+          delete plugin.storeplugincomments;
+          if (counter === result.length) {
+            return res.json(result);
+          }
+        });
+      });
+    });
     logger.notice("Getting Store plugins");
   }
 

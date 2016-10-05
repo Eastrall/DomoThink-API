@@ -11,6 +11,7 @@ import devices from './devices';
 import directives from './directives';
 import plugins from './plugins';
 import store from './store';
+import storeComments from './storeComments';
 // import box from './box';
 
 const routes = express.Router(); // eslint-disable-line new-cap
@@ -42,6 +43,11 @@ routes.get('/store', store.get);
 routes.get('/store/:id', store.getPlugin);
 routes.post('/store', store.post);
 routes.put('/store', store.put);
+// Store comments routes
+routes.get("/store/:id/comments", storeComments.get);
+routes.get("/store/comments/:id", storeComments.getComment);
+routes.post("/store/:id/comments", storeComments.post);
+// routes.put("/store/:id/comments", storeComments.put);
 
 // User management routes
 routes.get('/user', users.getAllUsers);
