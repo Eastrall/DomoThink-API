@@ -43,11 +43,13 @@ routes.get('/store', store.get);
 routes.get('/store/:id', store.getPlugin);
 routes.post('/store', store.post);
 routes.put('/store', store.put);
+// routes.delete('/store/:id', store.delete);
 // Store comments routes
 routes.get("/store/:id/comments", storeComments.get);
 routes.get("/store/comments/:id", storeComments.getComment);
 routes.post("/store/:id/comments", storeComments.post);
-// routes.put("/store/:id/comments", storeComments.put);
+// routes.put("/store/comments/:id", storeComments.put);
+// routes.delete("/store/comments/:id", storeComments.delete);
 
 // User management routes
 routes.get('/user', users.getAllUsers);

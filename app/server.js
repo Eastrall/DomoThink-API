@@ -38,14 +38,23 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // find a better implementation like: app.use('/api/*', authRequest);
-app.all('/user', authRequest);
-app.all('/user/*', authRequest);
-app.all('/devices', authRequest);
-app.all('/devices/*', authRequest);
-app.all('/directives', authRequest);
-app.all('/directives/*', authRequest);
-app.all('/plugins/', authRequest);
-app.all('/plugins/*', authRequest);
+app.all('/user');
+app.all('/user/*');
+app.all('/devices');
+app.all('/devices/*');
+app.all('/directives');
+app.all('/directives/*');
+app.all('/plugins/');
+app.all('/plugins/*');
+
+// app.all('/user', authRequest);
+// app.all('/user/*', authRequest);
+// app.all('/devices', authRequest);
+// app.all('/devices/*', authRequest);
+// app.all('/directives', authRequest);
+// app.all('/directives/*', authRequest);
+// app.all('/plugins/', authRequest);
+// app.all('/plugins/*', authRequest);
 
 app.use(router);
 router.use('/', routes);

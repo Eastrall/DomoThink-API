@@ -22,10 +22,15 @@ class Users {
       return httpCode.error400(res, "Passwords do not match");
     }
     dbModels.UserModel.one({userId: req.body.userId, password: req.body.oldPassword}, (err, user) => {
+      if (err) {
+        return httpCode.error500(res, "Impossible to get user");
+      } else if (!user) {
+        return httpCode.error404(res, 'User not found');
+      }
       user.save({password: req.body.newPassword}, err => {
         return (err ?
-          httpCode.error500(res, 'Error: Could not update device') :
-          httpCode.success(res, "Device updated !")
+          httpCode.error500(res, 'Error: Could not update password') :
+          httpCode.success(res, "Password updated !")
         );
       });
     });

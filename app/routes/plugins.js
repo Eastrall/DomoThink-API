@@ -45,13 +45,16 @@ class Plugins {
     // return (plugins.length === 0 ? httpCode.error404(res, "No plugins found") :
     //   res.send(plugins)
     // );
-    dbModels.PluginModel.all((err, result) => res.json(result));
+    dbModels.PluginModel.all((err, result) => {
+      if (err)
+        return httpCode.error500(res, "Impossible to get plugins");
+      return res.json(result);
+    });
     logger.notice("Getting plugins");
   }
 
   install(req, res) {
     try {
-//      mkdirSync(`${process.cwd()}/plugins/${req.body.name}`);
       Git.Clone(req.body.repository, `${process.cwd()}/plugins/${req.body.name}`).then(repository => { // eslint-disable-line new-cap
         logger.info("Plugin downloaded");
         dbModels.PluginModel.create(req.body, (err, result) => {

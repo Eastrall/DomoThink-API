@@ -11,7 +11,6 @@ import dbModels from './../models/DBModels';
 const deleteLinkedDirectives = deviceId => {
   dbModels.DirectiveModel.find({deviceId},
     (error, directives) => {
-      console.log("Directives", directives);
       if (!directives || directives.length === 0) {
         return 'No linked directives';
       }
@@ -37,7 +36,11 @@ class Devices {
    * @returns {Array} result The devices in the database
    */
   get(req, res) {
-    dbModels.DeviceModel.all((err, result) => res.json(result));
+    dbModels.DeviceModel.all((err, result) => {
+      if (err)
+        return httpCode.error500(res, "Unable to get devices");
+      return res.json(result);
+    });
     logger.notice("Getting devices");
   }
 
