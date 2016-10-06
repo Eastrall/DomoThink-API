@@ -84,7 +84,8 @@ class Models {
       rate: {type: 'number'},
       comment: {type: 'text'},
       date: {type: "date", time: false},
-      storeplugins_idPlugin: {type: 'number'} // eslint-disable-line camelcase
+      storeplugins_idPlugin: {type: 'number'}, // eslint-disable-line camelcase
+      keyLoginHash: {type: 'text'}
     });
     this.StorePluginCommentsModel.hasOne('storeplugins', this.StorePluginsModel, {reverse: "storeplugincomments"});
   }

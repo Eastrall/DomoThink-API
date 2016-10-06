@@ -48,8 +48,8 @@ routes.delete('/store', store.delete);
 routes.get("/store/:id/comments", storeComments.get);
 routes.get("/store/comments/:id", storeComments.getComment);
 routes.post("/store/:id/comments", storeComments.post);
-// routes.put("/store/comments/:id", storeComments.put);
-// routes.delete("/store/comments/:id", storeComments.delete);
+routes.put("/store/comments", storeComments.put);
+routes.delete("/store/comments", storeComments.delete);
 
 // User management routes
 routes.get('/user', users.getAllUsers);
