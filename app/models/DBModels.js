@@ -72,7 +72,8 @@ class Models {
       name: {type: 'text'},
       repository: {type: 'text'},
       language: {type: 'text'},
-      date: {type: "date", time: false}
+      date: {type: "date", time: false},
+      keyLoginHash: {type: 'text'}
     });
   }
 
