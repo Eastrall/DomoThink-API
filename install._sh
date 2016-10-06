@@ -10,22 +10,21 @@ echo "Starting installation..."
 
 ## UPDATE / UPGRADE PACKAGES ##
 
-sudo -s
-apt-get update -y
-apt-get upgrade -y
+sudo apt-get update -y
+sudo apt-get upgrade -y
 
 ## INSTALL TOOLS ##
 
 echo "Installing tools..."
-apt-get install -y emacs git
+sudo apt-get install -y emacs git
 echo "Tools installed!"
 
 ## INSTALL NODE.JS ##
 
 echo "Installing node.js..."
 curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-apt-get install -y nodejs
-apt-get install -y build-essential
+sudo apt-get install -y nodejs
+sudo apt-get install -y build-essential
 echo "Node.js installed!"
 
 ## INSTALL AND CONFIGURE MYSQL SERVER ##
@@ -37,19 +36,19 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password passwor
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password password_root'
 
 # install mysql server and client
-apt-get install -y mysql-server mysql-client
-/etc/init.d/mysql stop # stop the service
-mysql --bind-address="0.0.0.0"
-/etc/init.d/mysql start # start the service
+sudo apt-get install -y mysql-server mysql-client
+sudo /etc/init.d/mysql stop # stop the service
+sudo mysql --bind-address="0.0.0.0"
+sudo /etc/init.d/mysql start # start the service
 
 echo "mysql-server and mysql-client installed!"
 echo "Creating MySQL users..."
 
-mysql -e CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
-mysql -e CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
+sudo mysql -e CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
+sudo mysql -e CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
 
 # execute SQL script for database creation
-mysql -u root -p root_password < database.sql
+sudo mysql -u root -p root_password < database.sql
 
 echo "MySQL is now configured!"
 
@@ -62,13 +61,13 @@ echo "MySQL is now configured!"
 # Clone app from github
 
 cd /var
-git clone https://github.com/Eastrall/DomoThink-Test-API
-mv DomoThink-Test-API domothink
+sudo git clone https://github.com/Eastrall/DomoThink-Test-API
+sudo mv DomoThink-Test-API domothink
 
 # Compile app with babel
 cd /var/domothink
-npm install
-npm start
+sudo npm install
+sudo npm start
 
 # Configure API
 
