@@ -103,7 +103,7 @@ class StoreComments {
           httpCode.success(res, "Comment removed !")
         );
       });
-      logger.notice(`Removing comment {${req.params.id}}`);
+      logger.notice(`Removing comment {${req.body.idComment}}`);
     });
   }
 
