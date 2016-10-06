@@ -20,6 +20,7 @@ class Login {
    * @return {object} errorCode The error code.
    */
   login(req, res) {
+    var session = req.session;
     var username = req.body.login || '';
     var password = req.body.password || '';
 
@@ -41,9 +42,10 @@ class Login {
           }
 
           logger.notice('User "' + username + '" found.');
+          session.username = username;
           return res.json({
             status: 200,
-            token: generateToken(2),
+            token: generateToken(2, username),
             username: username
           });
         });
@@ -57,6 +59,8 @@ class Login {
    * @return {httpCode} code The http code.
    */
   logout(req, res) {
+    req.session.username = "";
+    req.session.destroy();
     return httpCode.success(res, 'logout success');
   }
 }
@@ -66,16 +70,18 @@ class Login {
  * expiration time.
  *
  * @param {integer} expirationTime The token expiration time (in days).
+ * @param {string} username The client username.
  * @return {object} token The generated token.
  */
-function generateToken(expirationTime) {
+function generateToken(expirationTime, username) {
    // Set the expiration time
   var date = new Date();
   date.setDate(date.getDate() + expirationTime);
 
    // Create the token
   var token = jwt.encode({
-    exp: date
+    exp: date,
+    username: username
   }, config.Config.auth.secret);
 
   return token;

@@ -66,6 +66,7 @@ sudo mv DomoThink-Test-API domothink
 
 # Compile app with babel
 cd /var/domothink
+
 sudo npm install
 sudo npm start
 

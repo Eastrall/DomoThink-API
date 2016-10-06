@@ -19,21 +19,24 @@ import dbModels from './../models/DBModels';
  * @return {Object} obj Object.
  */
 function authorize(req, res, next) {
-  var formatedMessage = 'New incoming request: ' + req.method + ': ' + req.url;
+  var session = req.session;
+  var formatedMessage = 'New incoming request: ' + req.method + ': ' + req.url + ' from ' + session.username;
   logger.request(formatedMessage);
 
   var token = (req.body && req.body.token) || req.headers['login-token'];
-  var username = (req.body && req.body.username) || req.headers['login-name'];
 
-  if (token && username) {
+  if (token) {
     try {
       var decoded = jwt.decode(token, config.Config.auth.secret);
 
       if (decoded.exp <= Date.now())
         return httpCode.console.error400('Token expired.');
 
+      if (decoded.username !== session.username)
+        return httpCode.error400('Invalid username');
+
       // get user
-      dbModels.UserModel.one({username: username}, (err, user) => {
+      dbModels.UserModel.one({username: session.username}, (err, user) => {
         if (err)
           return httpCode.error500('Internal error');
 
