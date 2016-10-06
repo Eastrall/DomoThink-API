@@ -72,7 +72,8 @@ class Models {
       name: {type: 'text'},
       repository: {type: 'text'},
       language: {type: 'text'},
-      date: {type: "date", time: false}
+      date: {type: "date", time: false},
+      keyLoginHash: {type: 'text'}
     });
   }
 
@@ -83,7 +84,8 @@ class Models {
       rate: {type: 'number'},
       comment: {type: 'text'},
       date: {type: "date", time: false},
-      storeplugins_idPlugin: {type: 'number'} // eslint-disable-line camelcase
+      storeplugins_idPlugin: {type: 'number'}, // eslint-disable-line camelcase
+      keyLoginHash: {type: 'text'}
     });
     this.StorePluginCommentsModel.hasOne('storeplugins', this.StorePluginsModel, {reverse: "storeplugincomments"});
   }

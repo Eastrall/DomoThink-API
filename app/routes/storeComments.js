@@ -21,6 +21,9 @@ class StoreComments {
     dbModels.StorePluginCommentsModel.find({storeplugins_idPlugin: req.params.id}, (err, result) => { // eslint-disable-line camelcase
       if (err)
         return httpCode.error500(res, "Impossible to get comments");
+      result.forEach(comment => {
+        comment.keyLoginHash = null;
+      });
       res.json(result);
     });
     logger.notice("Getting comments");
@@ -35,6 +38,7 @@ class StoreComments {
               return httpCode.error404(res, "Comment not found");
             }
             logger.notice(`Getting comment {${req.params.id}}`);
+            comment.keyLoginHash = null;
             return res.json(comment);
           });
   }
@@ -47,7 +51,7 @@ class StoreComments {
    * @returns {object} codeode The success/error code
    */
   post(req, res) {
-    const newComment = Object.assign({}, req.body, {storeplugins_idPlugin: req.params.id});
+    const newComment = Object.assign({}, req.body, {storeplugins_idPlugin: req.params.id}); // eslint-disable-line camelcase
     dbModels.StorePluginCommentsModel.create(newComment, (err, result) => {
       return (err ?
         httpCode.error404(res, 'Error: Bad parameters') :
@@ -64,12 +68,14 @@ class StoreComments {
    * @returns {object} codeode The success/error code
    */
   put(req, res) {
-    dbModels.StorePluginCommentsModel.one({idComment: req.body.idComment},
+    dbModels.StorePluginCommentsModel.one({idComment: req.body.idComment, keyLoginHash: req.body.keyLoginHash},
       (error, comment) => {
         if (!comment) {
           return httpCode.error404(res, "Comment not found");
         }
-        comment.save(req.body, err => {
+        let newComment = Object.assign({}, req.body);
+        delete newComment.storeplugins_idPlugin;
+        comment.save(newComment, err => {
           return (err ?
             httpCode.error500(res, 'Error: Could not update comment') :
             httpCode.success(res, "Comment updated !")
@@ -87,7 +93,7 @@ class StoreComments {
      * @returns {object} codeode The success/error code
      */
   delete(req, res) {
-    dbModels.StorePluginCommentsModel.one({idComment: req.params.id}, (error, comment) => {
+    dbModels.StorePluginCommentsModel.one({idComment: req.body.idComment, keyLoginHash: req.body.keyLoginHash}, (error, comment) => {
       if (!comment) {
         return httpCode.error404(res, "Comment not found");
       }
@@ -97,7 +103,7 @@ class StoreComments {
           httpCode.success(res, "Comment removed !")
         );
       });
-      logger.notice(`Removing comment {${req.params.id}}`);
+      logger.notice(`Removing comment {${req.body.idComment}}`);
     });
   }
 

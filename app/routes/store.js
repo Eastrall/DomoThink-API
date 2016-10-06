@@ -8,6 +8,24 @@ import logger from './../modules/logger';
 import httpCode from './../modules/httpCode';
 import dbModels from './../models/DBModels';
 
+const deleteLinkedComments = storeplugins_idPlugin => { // eslint-disable-line camelcase
+  dbModels.StorePluginCommentsModel.find({storeplugins_idPlugin}, // eslint-disable-line camelcase
+    (error, comments) => {
+      if (!comments || comments.length === 0) {
+        return 'No linked comments';
+      }
+      comments.forEach(comment => {
+        comment.remove(err => {
+          return (err ?
+          `Could not remove comment ${comment.idComment}` :
+          `Removed ${comment.idComment}`);
+        });
+      });
+      logger.notice(`Removing linked comments`);
+    }
+  );
+};
+
 class Store {
 
   /**
@@ -23,7 +41,10 @@ class Store {
       if (err || result.length === 0)
         return httpCode.error404(res, 'No plugin found.');
       result.forEach(plugin => {
+        plugin.keyLoginHash = "";
         plugin.getStoreplugincomments((error, data) => {
+          if (error)
+            return httpCode.error500(res, "Could not get plugins");
           counter += 1;
           if (data.length > 0) {
             let rate = 0;
@@ -34,6 +55,7 @@ class Store {
             plugin.rate = rate;
           }
           delete plugin.storeplugincomments;
+          plugin.keyLoginHash = null; // Impossible to remove it. Idk why.
           if (counter === result.length) {
             return res.json(result);
           }
@@ -50,6 +72,14 @@ class Store {
           return httpCode.error404(res, "Plugin not found");
         }
         plugin.getStoreplugincomments((err, data) => {
+          if (data.length > 0) {
+            let rate = 0;
+            plugin.storeplugincomments.forEach((comment, index, arr) => {
+              rate += comment.rate;
+            });
+            rate /= plugin.storeplugincomments.length;
+            plugin.rate = rate;
+          }
           return (err ? httpCode.error500(res, "Could not find plugin details") :
           res.json(plugin));
         });
@@ -64,6 +94,7 @@ class Store {
    * @returns {object} codeode The success/error code
    */
   post(req, res) {
+    // Boxkey verification ?
     dbModels.StorePluginsModel.create(req.body, (err, result) => {
       return (err ?
         httpCode.error404(res, 'Error: Bad parameters') :
@@ -81,7 +112,8 @@ class Store {
    * @returns {object} codeode The success/error code
    */
   put(req, res) {
-    dbModels.StorePluginsModel.one({idPlugin: req.body.idPlugin},
+    // Boxkey verification ?
+    dbModels.StorePluginsModel.one({idPlugin: req.body.idPlugin, keyLoginHash: req.body.keyLoginHash},
       (error, plugin) => {
         if (!plugin) {
           return httpCode.error404(res, "Plugin not found");
@@ -104,17 +136,20 @@ class Store {
      * @returns {object} codeode The success/error code
      */
   delete(req, res) {
-    dbModels.StorePluginsModel.one({idPlugin: req.params.id}, (error, plugin) => {
+    // Boxkey verification ?
+    dbModels.StorePluginsModel.one({idPlugin: req.body.idPlugin, keyLoginHash: req.body.keyLoginHash}, (error, plugin) => {
       if (!plugin) {
         return httpCode.error404(res, "Plugin not found");
       }
       plugin.remove(err => {
+        if (!err)
+          deleteLinkedComments(plugin.idPlugin); // eslint-disable-line camelcase
         return (err ?
           httpCode.error500(res, 'Error: Could not remove plugin') :
           httpCode.success(res, "Plugin removed !")
         );
       });
-      logger.notice(`Removing plugin {${req.params.id}}`);
+      logger.notice(`Removing plugin {${req.body.idPlugin}}`);
     });
   }
 
