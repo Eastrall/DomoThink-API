@@ -18,6 +18,18 @@ This is a test API for the DomoThink project. We develop this API in order to te
 - type "npm install"
 - type "npm start"
 
+# Installing on a Raspberry Pi environment (Raspbian)
+
+If you want to use the API on a Raspberry Pi with Raspbian, you can launch the `install.sh` file and it will setup a good environment for your API.
+
+Let's get started.
+
+- Connect to your Raspberry Pi with Putty (or everything else)
+- type `wget https://raw.githubusercontent.com/Eastrall/DomoThink-Test-API/master/install/install.sh`
+- type `chmod +x install.sh`
+- type `./install.sh`
+- wait ~10 minutes while the script setup the API for you
+
 ## Features
 
 - Login / Logout
