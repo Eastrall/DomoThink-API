@@ -70,6 +70,7 @@ class StoreComments {
   put(req, res) {
     dbModels.StorePluginCommentsModel.one({idComment: req.body.idComment, keyLoginHash: req.body.keyLoginHash},
       (error, comment) => {
+        console.log("Error", error);
         if (!comment) {
           return httpCode.error404(res, "Comment not found");
         }
