@@ -9,6 +9,7 @@ import path from 'path';
 import httpCode from './../modules/httpCode';
 import logger from './../modules/logger';
 import Git from 'nodegit';
+import simpleGit from 'simple-git';
 import dbModels from './../models/DBModels';
 import {dirs} from '../common';
 
@@ -54,20 +55,37 @@ class Plugins {
   }
 
   install(req, res) {
+    // try {
+    //   Git.Clone(req.body.repository, `${process.cwd()}/plugins/${req.body.name}`).then(repository => { // eslint-disable-line new-cap
+    //     logger.info("Plugin downloaded");
+    //     dbModels.PluginModel.create(req.body, (err, result) => {
+    //       if (err) {
+    //         rmdirSync(`${process.cwd()}/plugins/${req.body.name}/`);
+    //         return httpCode.error404(res, 'Error: Bad parameters');
+    //       }
+    //       return httpCode.success(res, `Plugin ${req.body.name} installed !`);
+    //     });
+    //   }).catch(e => {
+    //     logger.error("Unable to clone plugin");
+    //     return httpCode.error500(res, "Unable to clone plugin");
+    //   });
+    // } catch (e) {
+    //   return httpCode.error400(res, 'Plugin folder already exists');
+    // }
     try {
-      Git.Clone(req.body.repository, `${process.cwd()}/plugins/${req.body.name}`).then(repository => { // eslint-disable-line new-cap
+      require('simple-git')().clone(req.body.repository, `${process.cwd()}/plugins/${req.body.idPlugin}`,
+      repository => { // eslint-disable-line new-cap
         logger.info("Plugin downloaded");
         dbModels.PluginModel.create(req.body, (err, result) => {
           if (err) {
-            rmdirSync(`${process.cwd()}/plugins/${req.body.name}/`);
+            console.log("Error", err);
+            rmdirSync(`${process.cwd()}/plugins/${req.body.idPlugin}/`);
             return httpCode.error404(res, 'Error: Bad parameters');
           }
-          return httpCode.success(res, `Plugin ${req.body.name} installed !`);
+          return httpCode.success(res, `Plugin ${req.body.idPlugin} installed !`);
         });
-      }).catch(e => {
-        logger.error("Unable to clone plugin");
-        return httpCode.error500(res, "Unable to clone plugin");
-      });
+      }
+    );
     } catch (e) {
       return httpCode.error400(res, 'Plugin folder already exists');
     }
@@ -82,8 +100,8 @@ class Plugins {
         if (err)
           return httpCode.error500(res, 'Error: Could not remove device');
         try {
-          rmdirSync(`${process.cwd()}/plugins/${plugin.name}/`);
-          return httpCode.success(res, `Plugin ${plugin.name} removed`);
+          rmdirSync(`${process.cwd()}/plugins/${plugin.idPlugin}/`);
+          return httpCode.success(res, `Plugin ${plugin.idPlugin} removed`);
         } catch (e) {
           return httpCode.error404(res, 'Plugin not found');
         }
