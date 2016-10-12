@@ -46,7 +46,8 @@ class Login {
           return res.json({
             status: 200,
             token: generateToken(2, username),
-            username: username
+            username: username,
+            userId: result.userId
           });
         });
   }

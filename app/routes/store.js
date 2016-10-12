@@ -53,6 +53,8 @@ class Store {
             });
             rate /= plugin.storeplugincomments.length;
             plugin.rate = rate;
+          } else {
+            plugin.rate = -1;
           }
           delete plugin.storeplugincomments;
           plugin.keyLoginHash = null; // Impossible to remove it. Idk why.
@@ -79,6 +81,8 @@ class Store {
             });
             rate /= plugin.storeplugincomments.length;
             plugin.rate = rate;
+          } else {
+            plugin.rate = -1;
           }
           return (err ? httpCode.error500(res, "Could not find plugin details") :
           res.json(plugin));
