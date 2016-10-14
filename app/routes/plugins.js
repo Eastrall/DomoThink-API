@@ -48,7 +48,7 @@ class Plugins {
     // );
     dbModels.PluginModel.all((err, result) => {
       if (err)
-        return httpCode.error500(res, "Impossible to get plugins");
+        return httpCode.error404(res, "Impossible to get plugins");
       return res.json(result);
     });
     logger.notice("Getting plugins");
@@ -79,8 +79,11 @@ class Plugins {
         dbModels.PluginModel.create(req.body, (err, result) => {
           if (err) {
             console.log("Error", err);
+            if (err.code === 'ER_DUP_ENTRY') {
+              return httpCode.error400(res, "Plugin already installed");
+            }
             rmdirSync(`${process.cwd()}/plugins/${req.body.idPlugin}/`);
-            return httpCode.error404(res, 'Error: Bad parameters');
+            return httpCode.error400(res, "Unable to install plugin");
           }
           return httpCode.success(res, `Plugin ${req.body.idPlugin} installed !`);
         });
