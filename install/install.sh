@@ -77,31 +77,9 @@ sudo npm run-script prestart # compile the API using the prestart script.
 npm install forever -g
 sudo mkdir /var/run/forever
 
-echo '#!/bin/sh
+cp ./install/domothink /etc/init.d/domothink
 
-export PATH=$PATH:/usr/local/bin
-export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
-
-case "$1" in
-  start)
-  exec forever --spinSleepTime 10000 --sourceDir=/var/domothink -p /var/run/forever start dist/server.js
-  ;;
-
-  stop)
-  exec forever stop --sourceDir=/var/domothink dist/server.js
-  ;;
-
-  status)
-
-  ;;
-
-  default)
-  ;;
-esac
-
-exit 0' > /etc/init.d/domothink
-
-sudo chmod a+x /etc/init.d/domothink
+sudo chmod +x /etc/init.d/domothink
 sudo update-rc.d domothink defaults
 systemctl daemon-reload
 
