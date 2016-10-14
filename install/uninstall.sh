@@ -24,6 +24,7 @@ sudo apt-get purge -y mysql-server mysql-client
 
 sudo rm -rf /var/domothink
 sudo rm -rf /etc/init.d/domothink
+sudo rm -rf /etc/init.d/mysql
 systemctl daemon-reload
 
 # clean all

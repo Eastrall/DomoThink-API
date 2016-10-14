@@ -8,7 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import httpCode from './../modules/httpCode';
 import logger from './../modules/logger';
-import Git from 'nodegit';
+// import Git from 'nodegit';
 import simpleGit from 'simple-git';
 import dbModels from './../models/DBModels';
 import {dirs} from '../common';

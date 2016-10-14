@@ -34,7 +34,7 @@ class Login {
       },
         (err, result) => {
           if (err)
-            return httpCode.error404(res, 'Error');
+            return httpCode.error404(res, 'Database error.');
 
           if (!result || Object.keys(result).length === 0) {
             logger.warning('Cannot find user "' + username + '" in database.');

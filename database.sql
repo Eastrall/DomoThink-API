@@ -30,7 +30,7 @@ CREATE TABLE `devices` (
   `description` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `status` decimal(1,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idDevice`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (1,'name','optional',1),(2,'Device 2','Télé',0);
+INSERT INTO `devices` VALUES (1,'Autre exemple','Random',1),(2,'Device 2','Télé',0);
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +93,6 @@ CREATE TABLE `plugins` (
 
 LOCK TABLES `plugins` WRITE;
 /*!40000 ALTER TABLE `plugins` DISABLE KEYS */;
-INSERT INTO `plugins` VALUES (8,'coinslot-angular',1);
 /*!40000 ALTER TABLE `plugins` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,11 +107,14 @@ CREATE TABLE `storeplugincomments` (
   `idComment` int(11) NOT NULL AUTO_INCREMENT,
   `author` varchar(45) COLLATE utf8_bin NOT NULL,
   `rate` double NOT NULL,
-  `comment` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `comment` varchar(255) COLLATE utf8_bin DEFAULT '',
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `storeplugins_idPlugin` int(11) NOT NULL,
-  PRIMARY KEY (`idComment`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `keyLoginHash` varchar(255) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`idComment`),
+  KEY `storeplugins_idPlugin_idx` (`storeplugins_idPlugin`),
+  CONSTRAINT `idPlugin` FOREIGN KEY (`storeplugins_idPlugin`) REFERENCES `storeplugins` (`idPlugin`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +123,7 @@ CREATE TABLE `storeplugincomments` (
 
 LOCK TABLES `storeplugincomments` WRITE;
 /*!40000 ALTER TABLE `storeplugincomments` DISABLE KEYS */;
-INSERT INTO `storeplugincomments` VALUES (1,'John doe',4,'C\'est cool','2016-10-04 13:51:57',3),(2,'Gzanich',3.5,'C\'est bof','2016-10-04 14:21:23',3),(3,'Munsch',4.7,'J\'aime beaucoup ce plugin','2016-10-05 09:49:14',3),(4,'User de test',4.2,'Pas mal ça !','2016-10-05 13:40:00',3);
+INSERT INTO `storeplugincomments` VALUES (9,'Saluuuut',2.7,'Finallement ...','2016-10-06 13:52:48',12,'6f9b9af3cd6e8b8a73c2cdced37fe9f59226e27d'),(10,'User de test',4.2,'Pas mal ça !','2016-10-12 19:41:11',12,'example'),(11,'User de test',4.2,'Pas mal ça !','2016-10-12 19:41:24',12,'example');
 /*!40000 ALTER TABLE `storeplugincomments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,8 +140,9 @@ CREATE TABLE `storeplugins` (
   `repository` varchar(255) COLLATE utf8_bin NOT NULL,
   `language` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `keyLoginHash` varchar(255) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`idPlugin`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -148,7 +151,7 @@ CREATE TABLE `storeplugins` (
 
 LOCK TABLES `storeplugins` WRITE;
 /*!40000 ALTER TABLE `storeplugins` DISABLE KEYS */;
-INSERT INTO `storeplugins` VALUES (1,'coinslot-angular','https://github.com/GuillaumeMunsch/Coinslot-Angular.git','JS','0000-00-00 00:00:00'),(2,'swim-mill','https://github.com/GuillaumeMunsch/CECS-326-swim-mill.git','C','0000-00-00 00:00:00'),(3,'libellus','https://github.com/TeamLibellus/webapp.git','js','0000-00-00 00:00:00'),(4,'swimmill-326','https://github.com/GuillaumeMunsch/CECS-326-swim-mill','c','2016-10-04 12:22:40'),(5,'swimmill-326','https://github.com/GuillaumeMunsch/CECS-326-swim-mill','c','2016-10-04 13:51:00');
+INSERT INTO `storeplugins` VALUES (12,'node-orm','https://github.com/dresende/node-orm2.git','js ce coup ci','2016-10-06 12:00:35','6f9b9af3cd6e8b8a73c2cdced37fe9f59226e27d'),(13,'node-orm','https://github.com/dresende/node-orm2.git','js ce coup ci','2016-10-11 08:49:02','6f9b9af3cd6e8b8a73c2cdced37fe9f59226e27d');
 /*!40000 ALTER TABLE `storeplugins` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,4 +191,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-05 20:08:46
+-- Dump completed on 2016-10-13 12:25:26
