@@ -39,14 +39,14 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 # install mysql server and client
 sudo apt-get install -y mysql-server mysql-client
 sudo /etc/init.d/mysql stop # stop the service
-sudo mysql --bind-address="0.0.0.0"
+sudo mysql -u "root" "-ppassword_root" --bind-address="0.0.0.0"
 sudo /etc/init.d/mysql start # start the service
 
 echo "mysql-server and mysql-client installed!"
 echo "Creating MySQL users..."
 
-sudo mysql -e CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
-sudo mysql -e CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
+sudo mysql -u "root" "-ppassword_root" -e CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
+sudo mysql -u "root" "-ppassword_root" -e CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
 
 echo "MySQL is now configured!"
 
@@ -70,31 +70,36 @@ sudo mysql -u "root" "-ppassword_root" < database.sql
 
 # Configure API
 sudo npm install
-sudo npm prestart
+sudo npm run-script prestart # compile the API using the prestart script.
 
 # Create daemon service
 
 npm install forever -g
 sudo mkdir /var/run/forever
 
-echo "#!/bin/sh
+echo '#!/bin/sh
 
 export PATH=$PATH:/usr/local/bin
 export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
-#export SERVER_PORT=80
-#export SERVER_IFACE='0.0.0.0'
 
-case \"$1\" in
+case "$1" in
   start)
-  exec forever --sourceDir=/var/domothink -p /var/run/forever start dist/server.js
+  exec forever --spinSleepTime 10000 --sourceDir=/var/domothink -p /var/run/forever start dist/server.js
   ;;
 
   stop)
   exec forever stop --sourceDir=/var/domothink dist/server.js
   ;;
+
+  status)
+
+  ;;
+
+  default)
+  ;;
 esac
 
-exit 0" > /etc/init.d/domothink
+exit 0' > /etc/init.d/domothink
 
 sudo chmod a+x /etc/init.d/domothink
 sudo update-rc.d domothink defaults
