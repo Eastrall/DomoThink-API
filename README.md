@@ -50,4 +50,3 @@ This token is essential to access the other routes. To verify you are authentifi
 These are the HTTP headers you must implement:
 
 - `login-token` : corresponding to your `token`
-- `login-name` : corresponding to your `username` or `email` 
