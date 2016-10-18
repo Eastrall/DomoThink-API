@@ -75,13 +75,10 @@ sudo npm run-script prestart # compile the API using the prestart script.
 # Create daemon service
 
 npm install forever -g
-sudo mkdir /var/run/forever
+npm install forever-service -g
 
-cp ./install/domothink /etc/init.d/domothink
-
-sudo chmod +x /etc/init.d/domothink
-sudo update-rc.d domothink defaults
-systemctl daemon-reload
+# this line creates the daemon service
+sudo forever-service install domothink --script dist/server.js -f " --sourceDir=/var/domothink/"
 
 ## CLEAN ALL ##
 
