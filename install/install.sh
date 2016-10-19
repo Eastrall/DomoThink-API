@@ -45,8 +45,7 @@ sudo /etc/init.d/mysql start # start the service
 echo "mysql-server and mysql-client installed!"
 echo "Creating MySQL users..."
 
-sudo mysql -u "root" "-ppassword_root" -e CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
-sudo mysql -u "root" "-ppassword_root" -e CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
+sudo mysql -u "root" "-ppassword_root" < ./database/mysql_create_users.sql
 
 echo "MySQL is now configured!"
 
@@ -66,7 +65,7 @@ sudo mv DomoThink-Test-API domothink
 cd /var/domothink
 
 # Create database
-sudo mysql -u "root" "-ppassword_root" < database.sql
+sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
 
 # Configure API
 sudo npm install
@@ -86,6 +85,10 @@ sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get autoremove -y
 
+## START DOMOTHINK SERVICE ##
+
+sudo service domothink start
 
 ## END ##
+
 echo "DomoThink has been installed with success!"
