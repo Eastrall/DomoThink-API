@@ -5,90 +5,132 @@
 # DomoThink API setup script
 #
 
-echo "## DomoThink ##"
-echo "Starting installation..."
+# define some variables
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
 
-## UPDATE / UPGRADE PACKAGES ##
+#
+# Log function
+#
+function log {
+  log_type=$1
+  message=$2
 
-sudo apt-get update && apt-get upgrade
+  echo -e "${GREEN}${log_type}${NC}: ${message}"
+}
 
-## INSTALL TOOLS ##
+#
+# Update and upgrade the packages.
+#
+function update_packages {
+  sudo apt-get update && apt-get upgrade -y
+}
 
-echo "Installing tools..."
-sudo apt-get install -y emacs git debconf-utils htop libssl-dev
-echo "Tools installed!"
+#
+# Install the essential tools for the production environment.
+#
+function install_tools {
+  log "info" "Installing tools..."
+  sudo apt-get install -y emacs git debconf-utils htop
+  log "done" "Tools are now installed!"
+}
 
-## INSTALL NODE.JS ##
+#
+# Install Node.js.
+#
+function install_node_js {
+  log "info" "Installing node.js..."
+  sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+  sudo apt-get install -y build-essential
+  sudo apt-get install -y nodejs
+  log "info" "Node.js installed!"
+}
 
-echo "Installing node.js..."
-sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-sudo apt-get install -y nodejs
-sudo apt-get install -y build-essential
-sudo apt-get install -y nodejs
-echo "Node.js installed!"
+#
+# Install MySQL server.
+#
+function install_mysql_server {
+  log "info" "Installing MySQL server..."
 
-## INSTALL AND CONFIGURE MYSQL SERVER ##
+  # prepare root user
+  export DEBIAN_FRONTEND="noninteractive"
+  sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password password_root"
+  sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password password_root"
 
-echo "Installing mysql-server and mysql-client..."
+  # install mysql server and client
+  sudo apt-get install -y mysql-server mysql-client
+  sudo /etc/init.d/mysql stop # stop the service
+  sudo mysql -u "root" "-ppassword_root" --bind-address="0.0.0.0"
+  sudo /etc/init.d/mysql start # start the service
 
-# prepare root user
-export DEBIAN_FRONTEND="noninteractive"
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password password_root"
-sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password password_root"
+  log "done" "MySQL installed!"
+}
 
-# install mysql server and client
-sudo apt-get install -y mysql-server mysql-client
-sudo /etc/init.d/mysql stop # stop the service
-sudo mysql -u "root" "-ppassword_root" --bind-address="0.0.0.0"
-sudo /etc/init.d/mysql start # start the service
+#
+# Install PostegreSQL server.
+#
+function install_postegresql_server {
+  log "info" "Installing PostegreSQL server..."
+  # TODO
+  log "done" "PostegreSQL installed!"
+}
 
-echo "mysql-server and mysql-client installed!"
-echo "Creating MySQL users..."
+#
+# Setup the DomoThink API.
+#
+function setup_api {
+  cd /var
+  sudo git clone https://github.com/Eastrall/DomoThink-Test-API
+  sudo mv DomoThink-Test-API domothink
 
-sudo mysql -u "root" "-ppassword_root" < ./database/mysql_create_users.sql
+  # Compile app with babel
+  cd /var/domothink
 
-echo "MySQL is now configured!"
+  # Create users and database
+  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_create_users.sql
+  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
 
-## INSTALL POSTGRESQL ##
+  # Configure API
+  sudo npm install
+  sudo npm run-script prestart # compile the API using the prestart script.
 
-# TODO
+  # Create daemon service
 
-## INSTALL API ##
+  npm install forever -g
+  npm install forever-service -g
 
-# Clone app from github
+  # this line creates the daemon service
+  sudo forever-service install domothink --script dist/server.js -f " --sourceDir=/var/domothink/"
 
-cd /var
-sudo git clone https://github.com/Eastrall/DomoThink-Test-API
-sudo mv DomoThink-Test-API domothink
+}
 
-# Compile app with babel
-cd /var/domothink
+#
+# Clean the unused packages.
+#
+function clean_all {
+  sudo apt-get update -y
+  sudo apt-get upgrade
+  sudo apt-get autoremove -y
+}
 
-# Create database
-sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
+function start_service {
+  sudo service domothink start
+}
 
-# Configure API
-sudo npm install
-sudo npm run-script prestart # compile the API using the prestart script.
+##############
+# MAIN POINT #
+##############
 
-# Create daemon service
+log "info" "Starting DomoThink installation..."
 
-npm install forever -g
-npm install forever-service -g
+update_packages
+install_tools
+install_node_js
+install_mysql_server
+install_postegresql_server
+setup_api
+clean_all
+start_service
 
-# this line creates the daemon service
-sudo forever-service install domothink --script dist/server.js -f " --sourceDir=/var/domothink/"
-
-## CLEAN ALL ##
-
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get autoremove -y
-
-## START DOMOTHINK SERVICE ##
-
-sudo service domothink start
-
-## END ##
-
-echo "DomoThink has been installed with success!"
+log "done" "DomoThink API has been installed!"
