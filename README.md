@@ -10,7 +10,7 @@ Our team is divide in 3 teams:
 This is a test API for the DomoThink project. We develop this API in order to test our mobile applications while we wait the true C++ API developped by our Core Team.
 
 
-## How to setup
+## How to setup on Windows
 
 - Install node.js
 - Clone this repository or a stable release
@@ -35,12 +35,13 @@ Let's get started.
 - Login / Logout
 - Device management
 - Directive management
+- User management
+- Plugin management
+- Setup script for Linux environment
 
 ## To do list
 
-- Plugin management
-- User management
-- Setup script
+- ...
 
 ## Login headers
 
