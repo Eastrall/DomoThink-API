@@ -14,6 +14,7 @@ import database from './modules/database';
 import config from './modules/config';
 import routes from './routes';
 import authRequest from './middlewares/authRequest';
+import simulatorServer from './simulator/simulatorServer';
 
 logger.info('DomoThink API is starting...');
 
@@ -64,3 +65,6 @@ router.use('/', routes);
 // Start the API
 app.listen(config.Config.global.port); // If crashing on this line, the API is probably already running somewhere else
 logger.info('DomoThink API listening on port %s', config.Config.global.port);
+
+// Start simulator server
+simulatorServer.start();

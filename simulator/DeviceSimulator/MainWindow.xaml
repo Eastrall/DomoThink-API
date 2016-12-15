@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DeviceSimulator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        ResizeMode="NoResize"
+        Title="LIGHT_XBZF_37" Height="250" Width="250">
+    
     <Grid>
-        
+        <Image Source="Resources/light_off.png" Width="100" Height="100" />
     </Grid>
 </Window>
