@@ -18,6 +18,7 @@ class SimulatorServer {
       var socketRemote = socket.remoteAddress;
 
       logger.notice('New device connected from : ' + socketRemote);
+      sendWelcomeNewObject(socket);
 
       socket.on('data', function(incomingData) {
         handleIncomingData(incomingData, socket);
@@ -26,11 +27,25 @@ class SimulatorServer {
       socket.on('close', function(socket) {
         logger.info('Device disconnected.');
       });
+
+      socket.on('end', function (socket) {
+        logger.info('Device disconnected');
+      });
     });
 
     simulatorServer.listen(4444, "127.0.0.1");
     logger.notice('SimulatorServer listening on port 4444');
   }
+}
+
+function sendWelcomeNewObject(socket){
+  var data = "";
+  var buffer = Buffer.from('0x01;HelloWorld!');
+
+  console.log(buffer.toString('hex'));
+
+  socket.write(buffer.toString('hex'));
+  logger.info("sending data: " + buffer.toString('hex'));
 }
 
 /**
