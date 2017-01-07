@@ -88,8 +88,8 @@ function setup_api {
   cd /var/domothink
 
   # Create users and database
-  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_create_users.sql
-  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
+  sudo mysql -u "root" "-ppassword_root" < ./api/database/mysql_create_users.sql
+  sudo mysql -u "root" "-ppassword_root" < ./api/database/mysql_database.sql
 
   # Configure API
   sudo npm install
