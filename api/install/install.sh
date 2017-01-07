@@ -85,11 +85,11 @@ function setup_api {
   sudo mv DomoThink-Test-API domothink
 
   # Compile app with babel
-  cd /var/domothink
+  cd /var/domothink/api
 
   # Create users and database
-  sudo mysql -u "root" "-ppassword_root" < ./api/database/mysql_create_users.sql
-  sudo mysql -u "root" "-ppassword_root" < ./api/database/mysql_database.sql
+  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_create_users.sql
+  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
 
   # Configure API
   sudo npm install
