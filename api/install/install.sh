@@ -85,11 +85,11 @@ function setup_api {
   sudo mv DomoThink-API domothink
 
   # Compile app with babel
-  cd /var/domothink
+  cd /var/domothink/api
 
   # Create users and database
   sudo mysql -u "root" "-ppassword_root" < ./database/mysql_create_users.sql
-  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
+  sudo mysql -u "domo" "-pdefault_password" < ./database/mysql_database.sql
 
   # Configure API
   sudo npm install
@@ -101,7 +101,7 @@ function setup_api {
   npm install forever-service -g
 
   # this line creates the daemon service
-  sudo forever-service install domothink --script dist/server.js -f " --sourceDir=/var/domothink/"
+  sudo forever-service install domothink --script dist/server.js -f " --sourceDir=/var/domothink/api"
 
 }
 
