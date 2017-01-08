@@ -7,6 +7,8 @@
 import network from 'net';
 import logger from './../modules/logger';
 
+var devices = [];
+
 class SimulatorServer {
 
   /**
@@ -18,6 +20,7 @@ class SimulatorServer {
       var socketRemote = socket.remoteAddress;
 
       logger.notice('New device connected from : ' + socketRemote);
+      devices.push(socket);
       sendWelcomeNewObject(socket);
 
       socket.on('data', function(incomingData) {

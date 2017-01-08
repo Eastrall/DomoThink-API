@@ -7,8 +7,8 @@
 
 -- Create users
 
-CREATE USER 'domo'@'localhost' IDENTIFIED BY 'default_password';
-CREATE USER 'domo'@'%' IDENTIFIED BY 'default_password';
+CREATE USER domo@localhost IDENTIFIED BY 'default_password';
+CREATE USER domo@% IDENTIFIED BY 'default_password';
 
 -- Grant access
 

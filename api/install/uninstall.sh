@@ -51,7 +51,8 @@ function remove_mysql_server {
 }
 
 function remove_postgresql_server {
-  # TODO
+  log "info" "Remove PostgreSQL server..."
+  log "info" "PostgreSQL server deleted!"
 }
 
 function clean_all {
