@@ -16,6 +16,8 @@ import routes from './routes';
 import authRequest from './middlewares/authRequest';
 import simulatorServer from './simulator/simulatorServer';
 
+const server = () => {
+
 logger.info('DomoThink API is starting...');
 
 // Initialize API configuration
@@ -68,3 +70,7 @@ logger.info('DomoThink API listening on port %s', config.Config.global.port);
 
 // Start simulator server
 simulatorServer.start();
+
+}
+
+export default server;

@@ -5,9 +5,9 @@
   "main": "app/server.js",
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "nodemon --exec babel-node app/server.js",
-    "prestart": "npm run clean && babel app --out-dir dist",
-    "start": "node dist/server.js"
+    "dev": "nodemon --exec babel-node index.js",
+    "prestart": "npm run clean && babel index.js --source-maps --out-dir dist",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
