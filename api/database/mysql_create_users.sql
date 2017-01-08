@@ -12,4 +12,5 @@ CREATE USER domo@% IDENTIFIED BY 'default_password';
 
 -- Grant access
 
--- TODO
+GRANT ALL PRIVILEGES ON * . * TO domo@localhost;
+GRANT ALL PRIVILEGES ON * . * TO domo@%;
