@@ -81,8 +81,8 @@ function install_postegresql_server {
 #
 function setup_api {
   cd /var
-  sudo git clone https://github.com/Eastrall/DomoThink-Test-API
-  sudo mv DomoThink-Test-API domothink
+  sudo git clone https://github.com/Eastrall/DomoThink-API
+  sudo mv DomoThink-API domothink
 
   # Compile app with babel
   cd /var/domothink
