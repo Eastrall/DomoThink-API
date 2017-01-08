@@ -63,8 +63,8 @@
 
      conf.database = {
        host: 'localhost',
-       username: 'domo',
-       password: 'default_password',
+       username: 'root',
+       password: 'password_root',
        database: 'domothink'
      };
 

@@ -42,13 +42,17 @@ class SimulatorServer {
 }
 
 function sendWelcomeNewObject(socket){
-  var data = "";
-  var buffer = Buffer.from('0x01;HelloWorld!');
 
-  console.log(buffer.toString('hex'));
+  var data = {
+    header: 0x00,
+    message: "welcome!"
+  };
 
-  socket.write(buffer.toString('hex'));
-  logger.info("sending data: " + buffer.toString('hex'));
+  var buffer = JSON.stringify(data);
+  var b2 = Buffer.from(buffer.toString());
+
+  console.log(buffer.toString());
+  socket.write(b2);
 }
 
 /**
@@ -58,8 +62,15 @@ function sendWelcomeNewObject(socket){
  * @param {object} socket The socket where the incoming data come from.
  */
 function handleIncomingData(buffer, socket) {
-  logger.info('Incoming data from : ' + socket.remoteAddress);
-  logger.info(buffer);
+
+  var packetData = JSON.parse(buffer.toString());
+
+  switch (packetData.header) {
+    case 0x01:
+      logger.info("Recieved new object data");
+      console.log(packetData.data);
+      break;
+  }
 }
 
 const server = new SimulatorServer();
