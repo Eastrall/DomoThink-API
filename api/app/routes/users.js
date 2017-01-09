@@ -7,6 +7,7 @@
 import logger from './../modules/logger';
 import dbModels from './../models/DBModels';
 import httpCode from './../modules/httpCode';
+var assign = require('object.assign/polyfill')();
 
 class Users {
 
@@ -50,7 +51,7 @@ class Users {
         return httpCode.error403(res, 'This e-mail adress is already beeing used');
       else if (req.body.password !== req.body.confirmPassword)
         return httpCode.error400(res, 'Passwords do not match');
-      dbModels.UserModel.create(Object.assign({}, req.body, {username: req.body.login}), (err2, result) => {
+      dbModels.UserModel.create(assign({}, req.body, {username: req.body.login}), (err2, result) => {
         return (err2 ?
           httpCode.error404(res, 'Error: Unable to create account now. Try again later.') :
           httpCode.success(res, req.body.login + " account created !")
