@@ -115,7 +115,7 @@ function clean_all {
 }
 
 function start_service {
-  sudo service domothink start
+  sudo /usr/sbin/service domothink start
 }
 
 ##############
