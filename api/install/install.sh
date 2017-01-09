@@ -89,7 +89,7 @@ function setup_api {
 
   # Create users and database
   sudo mysql -u "root" "-ppassword_root" < ./database/mysql_create_users.sql
-  sudo mysql -u "domo" "-pdefault_password" < ./database/mysql_database.sql
+  sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
 
   # Configure API
   sudo npm install
