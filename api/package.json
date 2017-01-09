@@ -1,7 +1,7 @@
 {
   "name": "domothink-api",
   "version": "1.0.0",
-  "description": "DomoThink Test API",
+  "description": "DomoThink API",
   "main": "app/server.js",
   "scripts": {
     "clean": "rimraf dist",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Eastrall/DomoThink-Test-API.git"
+    "url": "git+https://github.com/Eastrall/DomoThink-API.git"
   },
   "keywords": [
     "api"
@@ -19,9 +19,9 @@
   "author": "Filipe GOMES PEIXOTO, Guillaume Munsch",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Eastrall/DomoThink-Test-API/issues"
+    "url": "https://github.com/Eastrall/DomoThink-API/issues"
   },
-  "homepage": "https://github.com/Eastrall/DomoThink-Test-API#readme",
+  "homepage": "https://github.com/Eastrall/DomoThink-API#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
     "consign": "^0.1.2",

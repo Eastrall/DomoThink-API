@@ -10,9 +10,7 @@ import users from './users';
 import devices from './devices';
 import directives from './directives';
 import plugins from './plugins';
-import store from './store';
-import storeComments from './storeComments';
-// import box from './box';
+import box from './box';
 
 const routes = express.Router(); // eslint-disable-line new-cap
 
@@ -38,18 +36,9 @@ routes.get('/plugins', plugins.get);
 routes.post('/plugins/install', plugins.install);
 routes.delete('/plugins/uninstall/:id', plugins.uninstall);
 
-// Store routes.
-routes.get('/store', store.get);
-routes.get('/store/:id', store.getPlugin);
-routes.post('/store', store.post);
-routes.put('/store', store.put);
-routes.delete('/store', store.delete);
-// Store comments routes
-routes.get("/store/:id/comments", storeComments.get);
-routes.get("/store/comments/:id", storeComments.getComment);
-routes.post("/store/:id/comments", storeComments.post);
-routes.put("/store/comments", storeComments.put);
-routes.delete("/store/comments", storeComments.delete);
+// Box routes.
+routes.get('/update', box.checkUpdate);
+routes.post('/update', box.installUpdate);
 
 // User management routes
 routes.get('/user', users.getAllUsers);
