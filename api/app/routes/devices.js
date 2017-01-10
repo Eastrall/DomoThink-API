@@ -7,6 +7,7 @@
 import logger from './../modules/logger';
 import httpCode from './../modules/httpCode';
 import dbModels from './../models/DBModels';
+import config from './../modules/config';
 
 const deleteLinkedDirectives = deviceId => {
   dbModels.DirectiveModel.find({deviceId},
@@ -107,6 +108,44 @@ class Devices {
       });
       logger.notice(`Removing device {${req.params.id}}`);
     });
+  }
+
+  /**
+     * /scan route for the devices. Scan the devices around the box.
+     *
+     * @param {object} req The incoming request. The id of the removed device is in req.params.di
+     * @param {object} res The outgoing result.
+     * @returns {Array} result The devices available around the box.
+     */
+  scan(req, res) {
+    var availableObjects = [];
+
+    availableObjects.concat(this.getAvailableZWaveObjects());
+    // TODO: add more protocoles here
+
+    if (config.Config.global.useSimulator == true) {
+      availableObjects.concat(this.getAvailableSimulatorObjects());
+    }
+  }
+
+  /**
+     * Gets all available objects using the ZWave procotole.
+     *
+     * @returns {Array} result Devices available.
+     */
+  getAvailableZWaveObjects() {
+    // TODO
+    return null;
+  }
+
+    /**
+       * Gets all available objects using the Simulator protocole.
+       *
+       * @returns {Array} result Devices available.
+       */
+  getAvailableSimulatorObjects() {
+    // TODO
+    return null;
   }
 
 }

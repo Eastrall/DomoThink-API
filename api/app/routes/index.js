@@ -21,6 +21,7 @@ routes.post('/logout', login.logout);
 
 // Devices routes.
 routes.get('/devices', devices.get);
+routes.get('/devices/scan', devices.scan);
 routes.post('/devices', devices.post);
 routes.put('/devices', devices.put);
 routes.delete('/devices/:id', devices.delete);

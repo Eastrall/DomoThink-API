@@ -55,6 +55,7 @@
      // default configuration
      conf.global = {
        port: 4242
+       useSimulator: true
      };
 
      conf.auth = {
