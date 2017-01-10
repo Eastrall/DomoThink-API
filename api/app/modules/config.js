@@ -54,7 +54,7 @@
 
      // default configuration
      conf.global = {
-       port: 8081
+       port: 4242
      };
 
      conf.auth = {
