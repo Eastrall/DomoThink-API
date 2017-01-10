@@ -120,11 +120,11 @@ class Devices {
   scan(req, res) {
     var availableObjects = [];
 
-    availableObjects.push(this.getAvailableZWaveObjects());
+    availableObjects.concat(this.getAvailableZWaveObjects());
     // TODO: add more protocoles here
 
     if (config.Config.global.useSimulator == true) {
-      availableObjects.push(this.getAvailableSimulatorObjects());
+      availableObjects.concat(this.getAvailableSimulatorObjects());
     }
   }
 
