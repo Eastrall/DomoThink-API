@@ -23,11 +23,11 @@ namespace DeviceSimulator.ViewModels
             this.clientThread.Start();
         }
 
-        ~LightViewModel()
+        public void Dispose()
         {
             this.client.Disconnect();
             this.client.Dispose();
-            //this.clientThread.Join();
+            this.clientThread.Join();
         }
     }
 }

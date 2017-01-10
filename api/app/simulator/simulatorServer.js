@@ -20,39 +20,46 @@ class SimulatorServer {
       var socketRemote = socket.remoteAddress;
 
       logger.notice('New device connected from : ' + socketRemote);
-      devices.push(socket);
       sendWelcomeNewObject(socket);
 
       socket.on('data', function(incomingData) {
         handleIncomingData(incomingData, socket);
       });
 
-      socket.on('close', function(socket) {
-        logger.info('Device disconnected.');
-      });
-
-      socket.on('end', function (socket) {
-        logger.info('Device disconnected');
+      socket.on('close', function() {
+        logger.info('Device ' + socket.name + ' disconected.');
+        removeDeviceFromArray(socket.name);
       });
     });
 
     simulatorServer.listen(4444, "127.0.0.1");
     logger.notice('SimulatorServer listening on port 4444');
   }
+
+  /**
+   * Initialize and start the simulator server.
+   *
+   * @return {Array} result List of connected devices.
+   */
+  getDevices() {
+    return devices;
+  }
 }
 
-function sendWelcomeNewObject(socket){
-
+/**
+ * Send a welcome message to the new connected device.
+ *
+ * @param {object} socket The connected device socket.
+ */
+function sendWelcomeNewObject(socket) {
   var data = {
     header: 0x00,
     message: "welcome!"
   };
-
-  var buffer = JSON.stringify(data);
-  var b2 = Buffer.from(buffer.toString());
+  var buffer = Buffer.from(JSON.stringify(data));
 
   console.log(buffer.toString());
-  socket.write(b2);
+  socket.write(buffer);
 }
 
 /**
@@ -62,15 +69,58 @@ function sendWelcomeNewObject(socket){
  * @param {object} socket The socket where the incoming data come from.
  */
 function handleIncomingData(buffer, socket) {
-
   var packetData = JSON.parse(buffer.toString());
 
   switch (packetData.header) {
     case 0x01:
-      logger.info("Recieved new object data");
-      console.log(packetData.data);
+
+      if (checkIfAlreadyConnected(packetData.data.name)) {
+        logger.error("Device " + packetData.data.name + " already connected.");
+        return;
+      }
+
+      socket.name = packetData.data.name;
+      socket.data = packetData.data;
+      devices.push(socket);
+      logger.info("Recieved new object data: " + socket.data.name);
       break;
   }
+}
+
+/**
+ * Search the connected device by his name and return is index in the array.
+ *
+ * @param {string} name The device name.
+ * @return {integer} The index of the device in the array.
+ */
+function getIndexOfDevice(name) {
+  for (var i = 0; i < devices.length; ++i) {
+    if (devices[i].name === name)
+      return i;
+  }
+  return -1;
+}
+
+/**
+ * Check if the device is already connected
+ *
+ * @param {object} name The device name.
+ * @return {bool} The result if the device exists or not.
+ */
+function checkIfAlreadyConnected(name) {
+  return getIndexOfDevice(name) > 0;
+}
+
+/**
+ * Remove the connected object from the list if it exists.
+ *
+ * @param {object} name The device name.
+ */
+function removeDeviceFromArray(name) {
+  var itemIndex = getIndexOfDevice(name);
+
+  if (itemIndex > -1)
+    devices.splice(itemIndex, 1);
 }
 
 const server = new SimulatorServer();
