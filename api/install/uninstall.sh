@@ -57,6 +57,7 @@ function remove_postgresql_server {
 
 function clean_all {
   sudo apt-get autoremove -y
+  sudo rm -rf /var/domothink
 }
 
 log "info" "Uninstalling DomoThink API"
