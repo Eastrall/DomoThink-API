@@ -54,7 +54,8 @@
 
      // default configuration
      conf.global = {
-       port: 8081
+       port: 8081,
+       useSimulator: true
      };
 
      conf.auth = {
