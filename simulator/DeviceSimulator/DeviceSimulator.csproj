@@ -36,8 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ether.Network">
-      <HintPath>..\..\..\..\Visual Studio 2015\Projects\Ether.Network\src\Ether.Network\bin\Debug\net45\Ether.Network.dll</HintPath>
+    <Reference Include="Ether.Network, Version=1.1.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ether.Network.1.1.7\lib\net45\Ether.Network.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
@@ -142,6 +143,8 @@
     <Compile Include="Models\ConnectedObject.cs" />
     <Compile Include="Packets\ObjectPackets.cs" />
     <Compile Include="Models\SimulatorPacket.cs" />
+    <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\IDialogService.cs" />
     <Compile Include="ViewModels\Framework\RelayCommand.cs" />
     <Compile Include="ViewModels\Framework\ViewModelBase.cs" />
     <Compile Include="ViewModels\LightViewModel.cs" />

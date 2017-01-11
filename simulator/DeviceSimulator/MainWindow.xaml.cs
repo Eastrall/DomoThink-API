@@ -14,16 +14,19 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using DeviceSimulator.Services;
 
 namespace DeviceSimulator
 {
     public partial class MainWindow : Window
     {
         private LightViewModel lightViewModel;
+        private IDialogService dialogService;
 
         public MainWindow()
         {
-            this.lightViewModel = new LightViewModel();
+            this.dialogService = new DialogService();
+            this.lightViewModel = new LightViewModel(this.dialogService);
 
             this.InitializeComponent();
             this.DataContext = this.lightViewModel;
