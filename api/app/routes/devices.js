@@ -8,6 +8,7 @@ import logger from './../modules/logger';
 import httpCode from './../modules/httpCode';
 import dbModels from './../models/DBModels';
 import config from './../modules/config';
+import simulatorServer from './../simulator/simulatorServer';
 
 const deleteLinkedDirectives = deviceId => {
   dbModels.DirectiveModel.find({deviceId},
@@ -120,34 +121,56 @@ class Devices {
   scan(req, res) {
     var availableObjects = [];
 
-    availableObjects.concat(this.getAvailableZWaveObjects());
+    availableObjects = availableObjects.concat(getAvailableZWaveObjects());
     // TODO: add more protocoles here
 
     if (config.Config.global.useSimulator == true) {
-      availableObjects.concat(this.getAvailableSimulatorObjects());
+      availableObjects = availableObjects.concat(getAvailableSimulatorObjects());
     }
+
+    logger.notice("scanning devices")
+    return httpCode.success(res, availableObjects);
+  }
+}
+
+/**
+   * Gets all available objects using the ZWave procotole.
+   *
+   * @returns {Array} result Devices available.
+   */
+function getAvailableZWaveObjects() {
+  // TODO
+  return [];
+}
+
+/**
+   * Gets all available objects using the Simulator protocole.
+   *
+   * @returns {Array} result Devices available.
+   */
+function getAvailableSimulatorObjects() {
+  var simulatorDevices = simulatorServer.getDevices();
+  var devicesAvailable = [];
+
+  for (var i = 0; i < simulatorDevices.length; ++i) {
+    if (isSimulatorDeviceAvailable(simulatorDevices[i]))
+      devicesAvailable.push(simulatorDevices[i].data);
   }
 
-  /**
-     * Gets all available objects using the ZWave procotole.
-     *
-     * @returns {Array} result Devices available.
-     */
-  getAvailableZWaveObjects() {
-    // TODO
-    return null;
-  }
+  return devicesAvailable;
+}
 
-    /**
-       * Gets all available objects using the Simulator protocole.
-       *
-       * @returns {Array} result Devices available.
-       */
-  getAvailableSimulatorObjects() {
-    // TODO
-    return null;
-  }
-
+/**
+   * Check if the simlated device is available in the database.
+   *
+   * @param {object} device The simulated device.
+   * @returns {bool} result Result if the simulated device is available.
+   */
+function isSimulatorDeviceAvailable(device) {
+  // check in database if the device has been added.
+  dbModels.devices.one({name: device.name}, (err, result) => {
+    return !result;
+  });
 }
 
 const devices = new Devices();
