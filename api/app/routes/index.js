@@ -10,7 +10,7 @@ import users from './users';
 import devices from './devices';
 import directives from './directives';
 import plugins from './plugins';
-import box from './box';
+import update from './update';
 
 const routes = express.Router(); // eslint-disable-line new-cap
 
@@ -38,8 +38,7 @@ routes.post('/plugins/install', plugins.install);
 routes.delete('/plugins/uninstall/:id', plugins.uninstall);
 
 // Box routes.
-routes.get('/update', box.checkUpdate);
-routes.post('/update', box.installUpdate);
+routes.post('/update', update.update);
 
 // User management routes
 routes.get('/user', users.getAllUsers);
