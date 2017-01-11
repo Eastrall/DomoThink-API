@@ -40,6 +40,7 @@ class Models {
       idDevice: {type: 'serial', key: true},
       name: {type: 'text'},
       description: {type: 'text'},
+      protocole: {type: 'text'},
       status: Boolean
     });
   }

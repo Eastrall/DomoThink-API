@@ -28,6 +28,7 @@ CREATE TABLE `devices` (
   `idDevice` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf8 NOT NULL,
   `description` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `protocole` varchar(45) CHARACTER SET utf8 NOT NULL,
   `status` decimal(1,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idDevice`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

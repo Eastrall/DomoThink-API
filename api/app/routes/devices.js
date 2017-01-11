@@ -149,7 +149,6 @@ function getAvailableZWaveObjects() {
    * @returns {Array} result Devices available.
    */
 function getAvailableSimulatorObjects() {
-
   var simulatorDevices = simulatorServer.getDevices();
   var devicesAvailable = [];
 
@@ -169,7 +168,9 @@ function getAvailableSimulatorObjects() {
    */
 function isSimulatorDeviceAvailable(device) {
   // check in database if the device has been added.
-  return true;
+  dbModels.devices.one({name: device.name}, (err, result) => {
+    return !result;
+  });
 }
 
 const devices = new Devices();
