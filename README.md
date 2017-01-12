@@ -1,4 +1,4 @@
-# DomoThink-Test-API
+# DomoThink-API
 
 DomoThink is a home automation project. We want to create a simple box that can communicate with all your connected objects. Our vision is to allow home automation to people who doesn't have a large computer science knowledge to control their home from there mobiles.
 
@@ -25,7 +25,7 @@ If you want to use the API on a Raspberry Pi with Raspbian, you can launch the `
 Let's get started.
 
 - Connect to your Raspberry Pi with Putty (or everything else)
-- type `wget https://raw.githubusercontent.com/Eastrall/DomoThink-Test-API/master/install/install.sh`
+- type `wget https://raw.githubusercontent.com/Eastrall/DomoThink-Test-API/master/scripts/install.sh`
 - type `chmod +x install.sh`
 - type `./install.sh`
 - wait ~10 minutes while the script setup the API for you
@@ -34,14 +34,12 @@ Let's get started.
 
 - Login / Logout
 - Device management
+  - Scan the environment for new devices
 - Directive management
 - User management
 - Plugin management
 - Setup script for Linux environment
-
-## To do list
-
-- ...
+- Simulator support
 
 ## Login headers
 

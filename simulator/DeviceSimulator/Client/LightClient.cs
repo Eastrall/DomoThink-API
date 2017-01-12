@@ -24,7 +24,7 @@ namespace DeviceSimulator.Client
                 Type = 1,
                 State = 0,
                 Protocole = "SIMULATOR",
-                Id = -1
+                Id = 35432
             };
         }
 

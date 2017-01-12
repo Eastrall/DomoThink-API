@@ -94,20 +94,20 @@ class Devices {
      * @returns {object} codeode The success/error code
      */
   delete(req, res) {
-    dbModels.DeviceModel.one({idDevice: req.params.id}, (error, device) => {
+    dbModels.DeviceModel.one({idDevice: req.params.idDevice}, (error, device) => {
       if (!device) {
         return httpCode.error404(res, "Device not found");
       }
       device.remove(err => {
         if (!err) {
-          deleteLinkedDirectives(req.params.id);
+          deleteLinkedDirectives(req.params.idDevice);
         }
         return (err ?
           httpCode.error500(res, 'Error: Could not remove device') :
           httpCode.success(res, "Device removed !")
         );
       });
-      logger.notice(`Removing device {${req.params.id}}`);
+      logger.notice(`Removing device {${req.params.idDevice}}`);
     });
   }
 
@@ -159,7 +159,7 @@ async function getAvailableSimulatorObjects() {
 
     if (isAvailable) {
       devicesAvailable.push({
-        idDevice: 0,
+        idDevice: simulatorDevices[i].data.id,
         name: simulatorDevices[i].data.name,
         description: simulatorDevices[i].data.name,
         protocole: 'SIMULATOR',
