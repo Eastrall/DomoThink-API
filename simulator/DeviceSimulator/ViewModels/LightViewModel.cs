@@ -4,6 +4,7 @@ using DeviceSimulator.Packets;
 using DeviceSimulator.Services;
 using DeviceSimulator.ViewModels.Framework;
 using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
 
@@ -11,6 +12,8 @@ namespace DeviceSimulator.ViewModels
 {
     public class LightViewModel : ViewModelBase
     {
+        private string ip;
+        public int port;
         private bool state;
 
         private IDialogService dialogService;
@@ -27,6 +30,8 @@ namespace DeviceSimulator.ViewModels
 
         public LightViewModel(IDialogService dialogService)
         {
+            this.ip = ConfigurationManager.AppSettings["ip"];
+            this.port = int.Parse(ConfigurationManager.AppSettings["port"]);
             this.dialogService = dialogService;
             this.Status = false;
 
@@ -43,7 +48,7 @@ namespace DeviceSimulator.ViewModels
             {
                 this.client = new LightClient();
                 this.client.OnIncomingData += Client_OnIncomingData;
-                this.client.Connect("127.0.0.1", 4444);
+                this.client.Connect(this.ip, this.port);
 
                 this.clientThread = new Thread(this.client.Run);
                 this.clientThread.Start();
