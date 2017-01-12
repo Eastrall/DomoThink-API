@@ -94,20 +94,20 @@ class Devices {
      * @returns {object} codeode The success/error code
      */
   delete(req, res) {
-    dbModels.DeviceModel.one({idDevice: req.params.idDevice}, (error, device) => {
+    dbModels.DeviceModel.one({idDevice: req.params.id}, (error, device) => {
       if (!device) {
         return httpCode.error404(res, "Device not found");
       }
       device.remove(err => {
         if (!err) {
-          deleteLinkedDirectives(req.params.idDevice);
+          deleteLinkedDirectives(req.params.id);
         }
         return (err ?
           httpCode.error500(res, 'Error: Could not remove device') :
           httpCode.success(res, "Device removed !")
         );
       });
-      logger.notice(`Removing device {${req.params.idDevice}}`);
+      logger.notice(`Removing device {${req.params.id}}`);
     });
   }
 
@@ -129,6 +129,26 @@ class Devices {
     }
 
     return res.json(availableObjects);
+  }
+
+
+  async changeStatus(req, res) {
+    var device = await getDeviceById(req.body.idDevice);
+
+    if (device != null) {
+      device.status = !device.status;
+      device.save(device);
+
+      if (device.protocole == "SIMULATOR") {
+        logger.info('send request to simulator')
+        sendNewStatusToSimulatedDevice(device, device.status);
+      }
+      else if (device.protocole == "ZWAVE") {
+        // TODO
+      }
+    }
+    else
+      return httpCode.error404(res, "Device not found");
   }
 }
 
@@ -190,6 +210,24 @@ function isSimulatorDeviceAvailable(device) {
       resolve(result == null ? true : false);
     });
   });
+}
+
+function getDeviceById(id) {
+  return new Promise(function (resolve, reject) {
+    dbModels.DeviceModel.one({idDevice: id}, (err, result) => {
+      if (err) resolve(null);
+      resolve(result);
+    });
+  });
+}
+
+function sendNewStatusToSimulatedDevice(device, status) {
+  var data = {
+    header: 0x02,
+    message: status
+  }
+
+  simulatorServer.sendDataTo(device.name, data);
 }
 
 const devices = new Devices();

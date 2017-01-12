@@ -24,7 +24,8 @@ routes.get('/devices', devices.get);
 routes.get('/devices/scan', devices.scan);
 routes.post('/devices', devices.post);
 routes.put('/devices', devices.put);
-routes.delete('/devices/:idDevice', devices.delete);
+routes.put('/devices/changeStatus/', devices.changeStatus);
+routes.delete('/devices/:id', devices.delete);
 
 // Directives routes.
 routes.get('/directives', directives.get);

@@ -139,6 +139,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\StateIndicator.xaml.cs">
+      <DependentUpon>StateIndicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IO\SPacket.cs" />
     <Compile Include="Models\ConnectedObject.cs" />
     <Compile Include="Packets\ObjectPackets.cs" />
@@ -148,6 +151,10 @@
     <Compile Include="ViewModels\Framework\RelayCommand.cs" />
     <Compile Include="ViewModels\Framework\ViewModelBase.cs" />
     <Compile Include="ViewModels\LightViewModel.cs" />
+    <Page Include="Controls\StateIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
