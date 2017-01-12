@@ -34,7 +34,7 @@ namespace DeviceSimulator.ViewModels
         {
             this.client.Disconnect();
             this.client.Dispose();
-            this.clientThread.Join();
+            this.clientThread?.Join();
         }
     }
 }
