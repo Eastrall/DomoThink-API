@@ -57,9 +57,9 @@ app.all('/devices', authRequest);
 app.all('/devices/*', authRequest);
 app.all('/directives', authRequest);
 app.all('/directives/*', authRequest);
-app.all('/plugins/', authRequest);
+app.all('/plugins', authRequest);
 app.all('/plugins/*', authRequest);
-app.all('/update', authRequest);
+app.all('/update');
 
 app.use(router);
 router.use('/', routes);

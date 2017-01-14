@@ -38,6 +38,7 @@ routes.post('/plugins/install', plugins.install);
 routes.delete('/plugins/uninstall/:id', plugins.uninstall);
 
 // Box routes.
+routes.get('/update', update.get);
 routes.post('/update', update.update);
 
 // User management routes

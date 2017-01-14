@@ -11,6 +11,19 @@ import httpCode from './../modules/httpCode';
 class Update {
 
   /**
+   * /get route for Update
+   *
+   * @param {object} req The incoming request.
+   * @param {object} res The outgoing result.
+   * @returns {Array} result The current API version
+   */
+  get(req, res) {
+    logger.notice("Getting version");
+    const json = require('../../package.json');
+    return res.json(json.version);
+  }
+
+  /**
    * Logout route. Process the user logout.
    *
    * @param {object} req The request data.
