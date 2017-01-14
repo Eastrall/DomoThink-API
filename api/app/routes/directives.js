@@ -30,7 +30,7 @@ class Directives {
    * @returns {object} codeode The success/error code
    */
   post(req, res) {
-    if (req.body.actionId < 1 || req.body.actionId >= 2) {
+    if (req.body.actionId < 0 || req.body.actionId > 2) {
       return httpCode.error400(res, 'Error: Unknown action');
     } else if (req.body.periodicityType < 1 || req.body.periodicityType >= 3) {
       return httpCode.error400(res, 'Error: Unknown periodicity type');
