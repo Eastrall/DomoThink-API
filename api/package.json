@@ -1,6 +1,6 @@
 {
   "name": "domothink-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "DomoThink API",
   "main": "app/server.js",
   "scripts": {
