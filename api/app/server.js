@@ -4,6 +4,7 @@
  *
  */
 "use strict";
+require("babel-polyfill");
 
 // Import the modules
 import bodyParser from 'body-parser';
@@ -15,7 +16,7 @@ import config from './modules/config';
 import routes from './routes';
 import authRequest from './middlewares/authRequest';
 import simulatorServer from './simulator/simulatorServer';
-import zwaveServer from './zwave/zwaveServer';
+//import zwaveServer from './zwave/zwaveServer';
 
 logger.info('DomoThink API is starting...');
 
@@ -71,4 +72,4 @@ logger.info('DomoThink API listening on port %s', config.Config.global.port);
 // Start simulator server
 simulatorServer.start();
 
-zwaveServer.start();
+//zwaveServer.start();

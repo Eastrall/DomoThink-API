@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="DeviceSimulator.Controls.StateIndicator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DeviceSimulator.Controls"
+             x:Name="STATE_INDICATOR"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Image>
+        <Image.Style>
+            <Style TargetType="{x:Type Image}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=State, ElementName=STATE_INDICATOR}" Value="False">
+                        <Setter Property="Source" Value="pack://application:,,,/DeviceSimulator;component/Resources/light_off.png"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=State, ElementName=STATE_INDICATOR}" Value="True">
+                        <Setter Property="Source" Value="pack://application:,,,/DeviceSimulator;component/Resources/light_on.png" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Image.Style>
+    </Image>
+</UserControl>

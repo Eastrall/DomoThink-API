@@ -1,31 +1,19 @@
 ﻿using Ether.Network;
 using Ether.Network.Packets;
-using System.Diagnostics;
-using System.Threading;
 using System.Collections.Generic;
 using System.Text;
 using DeviceSimulator.IO;
-using System;
 using Newtonsoft.Json.Linq;
-using DeviceSimulator.Packets;
-using DeviceSimulator.Models;
 
 namespace DeviceSimulator.Client
 {
     public class LightClient : NetClient
     {
-        public ConnectedObject Object { get; private set; }
+        public delegate void IncomingDataHandler(dynamic data);
+        public event IncomingDataHandler OnIncomingData;
 
         public LightClient()
         {
-            this.Object = new ConnectedObject()
-            {
-                Name = "LIGHT_XBZF_37",
-                Type = 1,
-                State = 0,
-                Protocole = "SIMULATOR",
-                Id = -1
-            };
         }
 
         protected override void OnClientDisconnected()
@@ -35,18 +23,8 @@ namespace DeviceSimulator.Client
         public override void HandleMessage(NetPacketBase packet)
         {
             dynamic packetData = JObject.Parse(Encoding.UTF8.GetString(packet.Buffer));
-            int header = packetData.header;
 
-            switch (header)
-            {
-                case 0x00:
-                    ObjectPackets.SendDeviceInformations(this, this.Object);
-                    break;
-
-                default:
-                    Debug.WriteLine("Unknow packet header: {0}", header);
-                    break;
-            }
+            this.OnIncomingData?.Invoke(packetData);
 
             base.HandleMessage(packet);
         }

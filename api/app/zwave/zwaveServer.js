@@ -164,4 +164,3 @@ zwave.on('notification', function(nodeid, notif, help) {
 zwave.on('scan complete', function() {
 		logger.info('scan complete, hit ^C to finish.');
 });
-

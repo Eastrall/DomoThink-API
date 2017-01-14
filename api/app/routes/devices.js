@@ -118,18 +118,37 @@ class Devices {
      * @param {object} res The outgoing result.
      * @returns {Array} result The devices available around the box.
      */
-  scan(req, res) {
+  async scan(req, res) {
     var availableObjects = [];
 
     availableObjects = availableObjects.concat(getAvailableZWaveObjects());
-    // TODO: add more protocoles here
 
     if (config.Config.global.useSimulator == true) {
-      availableObjects = availableObjects.concat(getAvailableSimulatorObjects());
+      var test = await getAvailableSimulatorObjects();
+      availableObjects = availableObjects.concat(test);
     }
 
-    logger.notice("scanning devices")
-    return httpCode.success(res, availableObjects);
+    return res.json(availableObjects);
+  }
+
+
+  async changeStatus(req, res) {
+    var device = await getDeviceById(req.body.idDevice);
+
+    if (device != null) {
+      device.status = !device.status;
+      device.save(device);
+
+      if (device.protocole == "SIMULATOR") {
+        logger.info('send request to simulator')
+        sendNewStatusToSimulatedDevice(device, device.status);
+      }
+      else if (device.protocole == "ZWAVE") {
+        // TODO
+      }
+    }
+    else
+      return httpCode.error404(res, "Device not found");
   }
 }
 
@@ -139,8 +158,11 @@ class Devices {
    * @returns {Array} result Devices available.
    */
 function getAvailableZWaveObjects() {
+  var availableObjects = [];
+
   // TODO
-  return [];
+
+  return availableObjects;
 }
 
 /**
@@ -148,13 +170,26 @@ function getAvailableZWaveObjects() {
    *
    * @returns {Array} result Devices available.
    */
-function getAvailableSimulatorObjects() {
-  var simulatorDevices = simulatorServer.getDevices();
+async function getAvailableSimulatorObjects() {
   var devicesAvailable = [];
+  var simulatorDevices = simulatorServer.getDevices();
 
   for (var i = 0; i < simulatorDevices.length; ++i) {
-    if (isSimulatorDeviceAvailable(simulatorDevices[i]))
-      devicesAvailable.push(simulatorDevices[i].data);
+    var isAvailable = await isSimulatorDeviceAvailable(simulatorDevices[i]);
+
+    if (isAvailable) {
+      devicesAvailable.push({
+        idDevice: simulatorDevices[i].data.id,
+        name: simulatorDevices[i].data.name,
+        description: simulatorDevices[i].data.name,
+        protocole: 'SIMULATOR',
+        status: simulatorDevices[i].data.state,
+        isController: simulatorDevices[i].data.isController
+      });
+    }
+    else {
+      console.log('not available');
+    }
   }
 
   return devicesAvailable;
@@ -168,9 +203,31 @@ function getAvailableSimulatorObjects() {
    */
 function isSimulatorDeviceAvailable(device) {
   // check in database if the device has been added.
-  dbModels.devices.one({name: device.name}, (err, result) => {
-    return !result;
+  return new Promise(function(resolve, reject){
+    dbModels.DeviceModel.one({name: device.name}, (err, result) => {
+      if (err) resolve(true);
+
+      resolve(result == null ? true : false);
+    });
   });
+}
+
+function getDeviceById(id) {
+  return new Promise(function (resolve, reject) {
+    dbModels.DeviceModel.one({idDevice: id}, (err, result) => {
+      if (err) resolve(null);
+      resolve(result);
+    });
+  });
+}
+
+function sendNewStatusToSimulatedDevice(device, status) {
+  var data = {
+    header: 0x02,
+    message: status
+  }
+
+  simulatorServer.sendDataTo(device.name, data);
 }
 
 const devices = new Devices();

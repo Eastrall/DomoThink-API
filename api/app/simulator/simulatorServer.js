@@ -7,7 +7,7 @@
 import network from 'net';
 import logger from './../modules/logger';
 
-var devices = [];
+var devices = []; // array of sockets
 
 class SimulatorServer {
 
@@ -43,6 +43,17 @@ class SimulatorServer {
    */
   getDevices() {
     return devices;
+  }
+
+
+  sendDataTo(deviceName, data) {
+    var device = getDeviceByName(deviceName);
+
+    if (device != null) {
+      var buffer = Buffer.from(JSON.stringify(data));
+
+      device.write(buffer);
+    }
   }
 }
 
@@ -99,6 +110,18 @@ function getIndexOfDevice(name) {
       return i;
   }
   return -1;
+}
+
+/**
+ * Search the connected device by his name and return it.
+ *
+ * @param {string} name The device name.
+ * @return {integer} The index of the device in the array.
+ */
+function getDeviceByName(name) {
+  var index = getIndexOfDevice(name);
+
+  return index > -1 ? devices[index] : null;
 }
 
 /**
