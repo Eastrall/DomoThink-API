@@ -20,7 +20,7 @@ class Update {
   get(req, res) {
     logger.notice("Getting version");
     const json = require('../../package.json');
-    return res.json(json.version);
+    return res.json({version: json.version});
   }
 
   /**
