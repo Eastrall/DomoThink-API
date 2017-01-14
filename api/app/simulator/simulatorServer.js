@@ -32,7 +32,7 @@ class SimulatorServer {
       });
     });
 
-    simulatorServer.listen(4444, "127.0.0.1");
+    simulatorServer.listen(4444);
     logger.notice('SimulatorServer listening on port 4444');
   }
 
