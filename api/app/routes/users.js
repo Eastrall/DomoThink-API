@@ -19,16 +19,16 @@ class Users {
    * @return {httpCode} code The http code.
    */
   changePassword(req, res) {
-    if (req.body.newPassword !== req.body.confirmPassword) {
+    if (req.body.newPassword.trim() !== req.body.confirmPassword.trim()) {
       return httpCode.error400(res, "Passwords do not match");
     }
-    dbModels.UserModel.one({userId: req.body.userId, password: req.body.oldPassword}, (err, user) => {
+    dbModels.UserModel.one({userId: req.body.userId, password: req.body.oldPassword.trim()}, (err, user) => {
       if (err) {
         return httpCode.error500(res, "Impossible to get user");
       } else if (!user) {
         return httpCode.error404(res, 'User not found');
       }
-      user.save({password: req.body.newPassword}, err => {
+      user.save({password: req.body.newPassword.trim()}, err => {
         return (err ?
           httpCode.error500(res, 'Error: Could not update password') :
           httpCode.success(res, "Password updated !")
@@ -44,19 +44,54 @@ class Users {
    * @param {object} res The request result.
    */
   createAccount(req, res) {
-    dbModels.UserModel.one({username: req.body.login}, (err, user) => {
+    dbModels.UserModel.one({username: req.body.login.trim()}, (err, user) => {
       if (err)
         return httpCode.error500(res, 'Unable to create account');
       else if (user)
         return httpCode.error403(res, 'This e-mail adress is already beeing used');
-      else if (req.body.password !== req.body.confirmPassword)
+      else if (req.body.password.trim() !== req.body.confirmPassword.trim())
         return httpCode.error400(res, 'Passwords do not match');
-      dbModels.UserModel.create(assign({}, req.body, {username: req.body.login}), (err2, result) => {
+      dbModels.UserModel.create(assign({}, req.body, {username: req.body.login.trim()}), (err2, result) => {
         return (err2 ?
           httpCode.error404(res, 'Error: Unable to create account now. Try again later.') :
           httpCode.success(res, req.body.login + " account created !")
         );
       });
+    });
+  }
+
+  forgottenPassword(req, res) {
+    dbModels.UserModel.one({username: req.body.login.trim(), boxKey: req.body.boxKey.trim()},
+      (error, user) => {
+        if (!user)
+          return httpCode.error404(res, "User not found");
+        else if (req.body.password.trim() !== req.body.confirmPassword.trim())
+          return httpCode.error400(res, 'Passwords do not match');
+        user.save(req.body, err => {
+          return (err ?
+            httpCode.error500(res, 'Error: Could not update user') :
+            httpCode.success(res, "Password reinitialized")
+          );
+        });
+        logger.notice(`Updating user {${user.userId}}`);
+      });
+  }
+
+  deleteAccount(req, res) {
+    dbModels.UserModel.one({
+      userId: req.body.userId,
+      username: req.body.login.trim(),
+      password: req.body.password.trim()
+    }, (error, user) => {
+      if (!user)
+        return httpCode.error404(res, "User not found");
+      user.remove(err => {
+        return (err ?
+          httpCode.error500(res, 'Error: Could not remove user') :
+          httpCode.success(res, "User removed !")
+        );
+      });
+      logger.notice(`Removing user {${req.body.userId}}`);
     });
   }
 
@@ -86,10 +121,6 @@ class Users {
 
   updateUser(req, res) {
     logger.notice('updateUser');
-  }
-
-  deleteUser(req, res) {
-    logger.notice('deleteUser');
   }
 }
 

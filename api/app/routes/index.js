@@ -18,6 +18,7 @@ const routes = express.Router(); // eslint-disable-line new-cap
 routes.post('/login', login.login);
 routes.post('/create_account', users.createAccount);
 routes.post('/logout', login.logout);
+routes.post('/forgotten_password', users.forgottenPassword);
 
 // Devices routes.
 routes.get('/devices', devices.get);
@@ -47,7 +48,7 @@ routes.get('/user', users.getAllUsers);
 routes.get('/user/:id', users.getUser);
 routes.post('/user', users.createUser);
 routes.put('/user', users.updateUser);
-routes.delete('/user/:id', users.deleteUser);
 routes.post('/user/change_password', users.changePassword);
+routes.post('/user/delete', users.deleteAccount);
 
 export default routes;
