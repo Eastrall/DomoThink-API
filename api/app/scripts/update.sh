@@ -9,9 +9,10 @@
 # MAIN POINT #
 ##############
 
+sudo service domothink start
 cd /var/domothink
 sudo git pull
 sudo npm i
 sudo npm run prestart
-sudo service domothink restart
+sudo service domothink start
 echo "Done"
