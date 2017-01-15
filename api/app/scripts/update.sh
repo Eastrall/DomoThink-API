@@ -9,7 +9,7 @@
 # MAIN POINT #
 ##############
 
-sudo service domothink start
+sudo service domothink stop
 cd /var/domothink
 sudo git pull
 sudo npm i
