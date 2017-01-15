@@ -9,10 +9,10 @@
 # MAIN POINT #
 ##############
 
-sudo service domothink stop
 cd /var/domothink
-sudo git pull
-sudo npm i
-sudo npm run prestart
-sudo service domothink start
+sudo service domothink stop
+sudo git pull >> update.log
+sudo npm i >> update.log
+sudo npm run prestart >> update.log
+sudo service domothink start >> update.log
 echo "Done"

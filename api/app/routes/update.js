@@ -31,7 +31,7 @@ class Update {
    * @return {httpCode} code The http code.
    */
   update(req, res) {
-    childprocess.exec('sudo bash /var/domothink/api/app/scripts/update.sh > update.log', err => {
+    childprocess.exec('sudo bash /var/domothink/api/app/scripts/update.sh', err => {
       if (err) {
         childprocess.exec('sudo service domothink restart', error => {
           if (error) {
