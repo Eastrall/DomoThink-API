@@ -42,7 +42,7 @@ routes.put('/plugins/changeStatus', plugins.changeStatus);
 routes.delete('/plugins/uninstall/:id', plugins.uninstall);
 
 // Box routes.
-routes.get('/box/status', box.status);
+routes.get('/box/status', box.serviceStatus);
 routes.get('/update', update.get);
 routes.post('/update', update.update);
 
