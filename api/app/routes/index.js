@@ -11,6 +11,7 @@ import devices from './devices';
 import directives from './directives';
 import plugins from './plugins';
 import update from './update';
+import box from './box';
 
 const routes = express.Router(); // eslint-disable-line new-cap
 
