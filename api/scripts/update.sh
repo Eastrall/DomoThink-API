@@ -26,7 +26,7 @@ function main {
 
   cd /var/domothink
   git pull origin master # pull from stable release
-  cd /var/domothink/API
+  cd /var/domothink/api
   sudo npm install # try to update node packages
   sudo npm run-script prestart # compile API
 
