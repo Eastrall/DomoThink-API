@@ -6,6 +6,7 @@
 
 import logger from './../modules/logger';
 import httpCode from './../modules/httpCode';
+import simulatorServer from './../simulator/simulatorServer';
 
 class Box {
 
@@ -29,6 +30,13 @@ class Box {
    */
   installUpdate(req, res) {
 
+  }
+
+  serviceStatus(req, res) {
+    return res.json({
+      simulator: simulatorServer.getStatus(),
+      zwave: false
+    });
   }
 
 }

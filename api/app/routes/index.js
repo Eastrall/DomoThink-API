@@ -41,6 +41,7 @@ routes.put('/plugins/changeStatus', plugin.changeStatus);
 routes.delete('/plugins/uninstall/:id', plugins.uninstall);
 
 // Box routes.
+routes.get('/box/status', box.status);
 routes.get('/update', update.get);
 routes.post('/update', update.update);
 

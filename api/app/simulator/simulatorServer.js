@@ -7,6 +7,7 @@
 import network from 'net';
 import logger from './../modules/logger';
 
+var status = false;
 var devices = []; // array of sockets
 
 class SimulatorServer {
@@ -34,6 +35,7 @@ class SimulatorServer {
 
     simulatorServer.listen(4444);
     logger.notice('SimulatorServer listening on port 4444');
+    status = true;
   }
 
   /**
@@ -45,6 +47,9 @@ class SimulatorServer {
     return devices;
   }
 
+  getStatus() {
+    return status;
+  }
 
   sendDataTo(deviceName, data) {
     var device = getDeviceByName(deviceName);
