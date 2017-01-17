@@ -111,6 +111,29 @@ class Plugins {
       });
     });
   }
+
+  async changeStatus(req, res) {
+    var plugin = await getPluginById(req.body.idPlugin);
+
+    if (plugin != null) {
+      plugin.status = !plugin.status;
+      plugin.save(plugin);
+
+      return httpCode.success(res, "OK");
+    }
+    else {
+      return httpCode.error404(res, "Plugin not found");
+    }
+  }
+}
+
+function getPluginById(id) {
+  return new Promise(function (resolve, reject) {
+    dbModels.plugins.one({idPlugin:id}, (err, result) => {
+      if (err) resolve(null);
+      else resolve(result);
+    });
+  });
 }
 
 const plugins = new Plugins();

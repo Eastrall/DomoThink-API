@@ -37,6 +37,7 @@ routes.delete('/directives/:id', directives.delete);
 // Plugins routes.
 routes.get('/plugins', plugins.get);
 routes.post('/plugins/install', plugins.install);
+routes.put('/plugins/changeStatus', plugin.changeStatus);
 routes.delete('/plugins/uninstall/:id', plugins.uninstall);
 
 // Box routes.
