@@ -40,10 +40,9 @@ function install_tools {
 #
 function install_node_js {
   log "info" "Installing node.js..."
-  sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+  sudo curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
   sudo apt-get install -y nodejs
   sudo apt-get install -y build-essential
-  sudo apt-get install -y nodejs
   log "info" "Node.js installed!"
 }
 
@@ -92,16 +91,16 @@ function setup_api {
   sudo mysql -u "root" "-ppassword_root" < ./database/mysql_database.sql
 
   # Configure API
+  sudo npm install babel-cli -g
   sudo npm install
   sudo npm run-script prestart # compile the API using the prestart script.
 
   # Create daemon service
 
-  npm install forever -g
-  npm install forever-service -g
+  sudo npm install forever forever-service -g
 
   # this line creates the daemon service
-  sudo forever-service install domothink --script dist/server.js -f " --sourceDir=/var/domothink/"
+  sudo forever-service install domothink --script dist/server.js -f " --sourceDir=/var/domothink/api"
 
 }
 
@@ -115,7 +114,9 @@ function clean_all {
 }
 
 function start_service {
-  sudo service domothink start
+  sudo /usr/sbin/service domothink start
+  sudo /usr/sbin/service domothink stop
+  sudo /usr/sbin/service domothink start
 }
 
 ##############

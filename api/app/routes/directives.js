@@ -30,9 +30,32 @@ class Directives {
    * @returns {object} codeode The success/error code
    */
   post(req, res) {
+    if (req.body.actionId < 0 || req.body.actionId > 2) {
+      return httpCode.error400(res, 'Error: Unknown action');
+    } else if (req.body.periodicityType < 1 || req.body.periodicityType >= 3) {
+      return httpCode.error400(res, 'Error: Unknown periodicity type');
+    } else if (req.body.periodicityType === 2) {
+      let periodicityData = null;
+      try {
+        periodicityData = JSON.parse(req.body.periodicityData);
+      } catch (e) {
+        return httpCode.error400(res, 'Error: Invalid date');
+      }
+      if (!periodicityData.day || !periodicityData.hour) {
+        return httpCode.error400(res, 'Error: Invalid date');
+      } else if (parseInt(periodicityData.day, 10) <= 0 || parseInt(periodicityData.day, 10) > 7) {
+        return httpCode.error400(res, 'Error: Unknown day');
+      } else if (!periodicityData.hour.match(/\d{2}:\d{2}/g)) {
+        return httpCode.error400(res, 'Error: Unknown hour');
+      }
+      const hourMins = periodicityData.hour.split(':').map(elem => parseInt(elem, 10));
+      if (hourMins[0] >= 24 || hourMins[1] >= 60) {
+        return httpCode.error400(res, 'Error: Invalid hour');
+      }
+    }
     dbModels.DirectiveModel.create(req.body, (err, result) => {
       return (err ?
-        httpCode.error404(res, 'Error: Bad parameters') :
+        httpCode.error400(res, 'Error: Bad parameters') :
         httpCode.success(res, req.body.name + " added !")
       );
     });
@@ -56,7 +79,7 @@ class Directives {
           return (err ?
           httpCode.error500(res, 'Error: Could not update directive') :
           httpCode.success(res, "Directive updated !")
-        );
+          );
         });
         logger.notice(`Updating directive {${req.body.idDirective}}`);
       });

@@ -54,7 +54,8 @@
 
      // default configuration
      conf.global = {
-       port: 8081
+       port: 4242,
+       useSimulator: true
      };
 
      conf.auth = {
@@ -63,8 +64,8 @@
 
      conf.database = {
        host: 'localhost',
-       username: 'domo',
-       password: 'default_password',
+       username: 'root',
+       password: 'password_root',
        database: 'domothink'
      };
 

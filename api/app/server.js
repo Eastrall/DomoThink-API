@@ -4,6 +4,7 @@
  *
  */
 "use strict";
+require("babel-polyfill");
 
 // Import the modules
 import bodyParser from 'body-parser';
@@ -15,6 +16,7 @@ import config from './modules/config';
 import routes from './routes';
 import authRequest from './middlewares/authRequest';
 import simulatorServer from './simulator/simulatorServer';
+// import zwaveServer from './zwave/zwaveServer';
 
 logger.info('DomoThink API is starting...');
 
@@ -37,6 +39,11 @@ router.get('/', function(req, res) {
 // Configure application
 let app = express();
 app.use(session({secret: 'test'}));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -50,14 +57,15 @@ app.all('/directives/*');
 app.all('/plugins/');
 app.all('/plugins/*');*/
 
-app.all('/user', authRequest);
-app.all('/user/*', authRequest);
-app.all('/devices', authRequest);
-app.all('/devices/*', authRequest);
-app.all('/directives', authRequest);
-app.all('/directives/*', authRequest);
-app.all('/plugins/', authRequest);
+app.all('/user');
+app.all('/user/*');
+app.all('/devices');
+app.all('/devices/*');
+app.all('/directives');
+app.all('/directives/*');
+app.all('/plugins');
 app.all('/plugins/*');
+app.all('/update');
 
 app.use(router);
 router.use('/', routes);
@@ -68,3 +76,5 @@ logger.info('DomoThink API listening on port %s', config.Config.global.port);
 
 // Start simulator server
 simulatorServer.start();
+
+// zwaveServer.start();

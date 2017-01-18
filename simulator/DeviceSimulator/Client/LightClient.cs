@@ -1,16 +1,17 @@
 ﻿using Ether.Network;
 using Ether.Network.Packets;
-using System.Diagnostics;
-using System.Threading;
 using System.Collections.Generic;
 using System.Text;
 using DeviceSimulator.IO;
-using System;
+using Newtonsoft.Json.Linq;
 
 namespace DeviceSimulator.Client
 {
     public class LightClient : NetClient
     {
+        public delegate void IncomingDataHandler(dynamic data);
+        public event IncomingDataHandler OnIncomingData;
+
         public LightClient()
         {
         }
@@ -21,28 +22,11 @@ namespace DeviceSimulator.Client
 
         public override void HandleMessage(NetPacketBase packet)
         {
-            var header = Encoding.UTF8.GetString(packet.Buffer);
-            var p = Encoding.UTF8.GetString(this.FromHex(header));
+            dynamic packetData = JObject.Parse(Encoding.UTF8.GetString(packet.Buffer));
 
-            switch (header)
-            {
-                default:
-                    Debug.WriteLine("Unknow packet header: {0}", header);
-                    break;
-            }
+            this.OnIncomingData?.Invoke(packetData);
 
             base.HandleMessage(packet);
-        }
-
-        public byte[] FromHex(string hex)
-        {
-            hex = hex.Replace("-", "");
-            byte[] raw = new byte[hex.Length / 2];
-            for (int i = 0; i < raw.Length; i++)
-            {
-                raw[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
-            }
-            return raw;
         }
 
         protected override IReadOnlyCollection<NetPacketBase> SplitPackets(byte[] buffer)

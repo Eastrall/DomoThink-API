@@ -1,7 +1,7 @@
 {
   "name": "domothink-api",
-  "version": "1.0.0",
-  "description": "DomoThink Test API",
+  "version": "1.0.3",
+  "description": "DomoThink API",
   "main": "app/server.js",
   "scripts": {
     "clean": "rimraf dist",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Eastrall/DomoThink-Test-API.git"
+    "url": "git+https://github.com/Eastrall/DomoThink-API.git"
   },
   "keywords": [
     "api"
@@ -19,9 +19,9 @@
   "author": "Filipe GOMES PEIXOTO, Guillaume Munsch",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Eastrall/DomoThink-Test-API/issues"
+    "url": "https://github.com/Eastrall/DomoThink-API/issues"
   },
-  "homepage": "https://github.com/Eastrall/DomoThink-Test-API#readme",
+  "homepage": "https://github.com/Eastrall/DomoThink-API#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
     "consign": "^0.1.2",
@@ -32,14 +32,17 @@
     "jwt-simple": "^0.5.0",
     "mysql": "^2.11.1",
     "net": "^1.0.2",
+    "object.assign": "^4.0.4",
     "orm": "^3.1.0",
-    "packet": "0.0.7",
     "sha1": "^1.1.1",
     "simple-git": "^1.54.0",
     "winston": "^2.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
+    "babel-plugin-syntax-async-functions": "^6.1.4",
+    "babel-plugin-transform-regenerator": "^6.1.4",
+    "babel-polyfill": "^6.1.4",
     "babel-preset-es2015": "^6.14.0",
     "eslint": "^3.5.0",
     "eslint-config-google": "^0.6.0",

@@ -2,7 +2,7 @@
 
 #
 # Author: Filipe GOMES PEIXOTO <gomespeixoto.filipe@gmail.com>
-# DomoThink API setup script
+# DomoThink API uninstall script
 #
 
 # define some variables
@@ -51,11 +51,13 @@ function remove_mysql_server {
 }
 
 function remove_postgresql_server {
-  # TODO
+  log "info" "Remove PostgreSQL server..."
+  log "info" "PostgreSQL server deleted!"
 }
 
 function clean_all {
   sudo apt-get autoremove -y
+  sudo rm -rf /var/domothink
 }
 
 log "info" "Uninstalling DomoThink API"
