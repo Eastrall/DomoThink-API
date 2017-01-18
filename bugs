@@ -1,0 +1,31 @@
+1.
+
+Error Result :
+When running two instance of the domothink-api the second instance crash.
+
+Expecting Result :
+The second instance do not crash an write an error message saying it cannot run with this configuration.
+
+Step to reproduce :
+- Open two terminals
+- run `npm start` in the first terminal, then once it is initialized, redo this operation in the second terminal
+
+Error Message :
+
+events.js:160
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE :::8081
+    at Object.exports._errnoException (util.js:1022:11)
+    at exports._exceptionWithHostPort (util.js:1045:20)
+    at Server._listen2 (net.js:1262:14)
+    at listen (net.js:1298:10)
+    at Server.listen (net.js:1376:9)
+    at Function.listen (C:\Users\Victor\Documents\DomoThink-API\api\node_modules\express\lib\application.js:617:24)
+    at Object.<anonymous> (C:\Users\Victor\Documents\DomoThink-API\api\dist\server.js:92:5)
+    at Module._compile (module.js:573:32)
+    at Object.Module._extensions..js (module.js:582:10)
+    at Module.load (module.js:490:32)
+
+
