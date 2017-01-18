@@ -129,7 +129,7 @@ class Plugins {
 
 function getPluginById(id) {
   return new Promise(function (resolve, reject) {
-    dbModels.plugins.one({idPlugin:id}, (err, result) => {
+    dbModels.PluginModel.one({idPlugin:id}, (err, result) => {
       if (err) resolve(null);
       else resolve(result);
     });
