@@ -16,7 +16,7 @@ import config from './modules/config';
 import routes from './routes';
 import authRequest from './middlewares/authRequest';
 import simulatorServer from './simulator/simulatorServer';
-// import zwaveServer from './zwave/zwaveServer';
+import zwaveServer from './zwave/zwaveServer';
 
 logger.info('DomoThink API is starting...');
 
@@ -75,6 +75,7 @@ app.listen(config.Config.global.port); // If crashing on this line, the API is p
 logger.info('DomoThink API listening on port %s', config.Config.global.port);
 
 // Start simulator server
-simulatorServer.start();
+//simulatorServer.start();
 
-// zwaveServer.start();
+// Start zwave server
+zwaveServer.start();

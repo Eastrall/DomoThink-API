@@ -9,6 +9,7 @@ import httpCode from './../modules/httpCode';
 import dbModels from './../models/DBModels';
 import config from './../modules/config';
 import simulatorServer from './../simulator/simulatorServer';
+import zwaveServer from './../zwave/zwaveServer';
 
 const deleteLinkedDirectives = deviceId => {
   dbModels.DirectiveModel.find({deviceId},
@@ -40,7 +41,13 @@ class Devices {
   get(req, res) {
     dbModels.DeviceModel.all((err, result) => {
       if (err)
-        return httpCode.error500(res, "Unable to get devices");
+          return httpCode.error500(res, "Unable to get devices");
+
+	for (var i = 0; i < result.length; ++i) {
+	    if (result[i].protocole == "ZWAVE")
+		result[i].temperature = zwaveServer.getTemperature(result[i].name);
+	}
+	
       return res.json(result);
     });
     logger.notice("Getting devices");
@@ -118,10 +125,12 @@ class Devices {
      * @param {object} res The outgoing result.
      * @returns {Array} result The devices available around the box.
      */
-  async scan(req, res) {
+    async scan(req, res) {
+	logger.info('Scanning devices...');
     var availableObjects = [];
 
-    availableObjects = availableObjects.concat(getAvailableZWaveObjects());
+      var zwaveDevices = await getAvailableZWaveObjects();
+    availableObjects = availableObjects.concat(zwaveDevices);
 
     if (config.Config.global.useSimulator == true) {
       var test = await getAvailableSimulatorObjects();
@@ -157,12 +166,34 @@ class Devices {
    *
    * @returns {Array} result Devices available.
    */
-function getAvailableZWaveObjects() {
-  var availableObjects = [];
+async function getAvailableZWaveObjects() {
+  var devs = [];
+    var zwaveDevices = zwaveServer.getDevices();
 
-  // TODO
+    for (var i = 1; i < zwaveDevices.length; ++i) {
+	if (zwaveDevices[i].isController == true || zwaveDevices[i].product == '')
+	    continue;
+	
+	var isAvailable = await isSimulatorDeviceAvailable(zwaveDevices[i].product);
+	
+	if (isAvailable) {
+	    devs.push({
+		idDevice: parseInt(zwaveDevices[i].productid),
+		name: zwaveDevices[i].product,
+		description: zwaveDevices[i].product,
+		protocole: 'ZWAVE',
+		status: false,
+		temperature: zwaveServer.getTemperature(zwaveDevices[i].product),
+	    });
+	}
+	else {
+	    logger.error('not available');
+	}
+    }
 
-  return availableObjects;
+    console.log(devs);
+
+  return devs;
 }
 
 /**
@@ -175,7 +206,7 @@ async function getAvailableSimulatorObjects() {
   var simulatorDevices = simulatorServer.getDevices();
 
   for (var i = 0; i < simulatorDevices.length; ++i) {
-    var isAvailable = await isSimulatorDeviceAvailable(simulatorDevices[i]);
+    var isAvailable = await isSimulatorDeviceAvailable(simulatorDevices[i].name);
 
     if (isAvailable) {
       devicesAvailable.push({
@@ -184,7 +215,7 @@ async function getAvailableSimulatorObjects() {
         description: simulatorDevices[i].data.name,
         protocole: 'SIMULATOR',
         status: simulatorDevices[i].data.state,
-        isController: simulatorDevices[i].data.isController
+        //isController: simulatorDevices[i].data.isController
       });
     }
     else {
@@ -201,10 +232,11 @@ async function getAvailableSimulatorObjects() {
    * @param {object} device The simulated device.
    * @returns {bool} result Result if the simulated device is available.
    */
-function isSimulatorDeviceAvailable(device) {
-  // check in database if the device has been added.
+function isSimulatorDeviceAvailable(deviceName) {
+    // check in database if the device has been added.
+    logger.info("check if device '" + deviceName + "' is available");
   return new Promise(function(resolve, reject){
-    dbModels.DeviceModel.one({name: device.name}, (err, result) => {
+    dbModels.DeviceModel.one({name: deviceName}, (err, result) => {
       if (err) resolve(true);
 
       resolve(result == null ? true : false);

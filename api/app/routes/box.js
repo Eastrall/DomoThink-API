@@ -7,6 +7,7 @@
 import logger from './../modules/logger';
 import httpCode from './../modules/httpCode';
 import simulatorServer from './../simulator/simulatorServer';
+import zwaveServer from './../zwave/zwaveServer';
 
 class Box {
 
@@ -35,7 +36,7 @@ class Box {
   serviceStatus(req, res) {
     return res.json({
       simulator: simulatorServer.getStatus(),
-      zwave: false
+	zwave: zwaveServer.isOnline(),
     });
   }
 
